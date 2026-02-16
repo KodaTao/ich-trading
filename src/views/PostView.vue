@@ -8,6 +8,7 @@ import MarkdownRenderer from '../components/MarkdownRenderer.vue'
 import NoteList from '../components/NoteList.vue'
 import TableOfContents from '../components/TableOfContents.vue'
 import FullscreenViewer from '../components/FullscreenViewer.vue'
+import GiscusComments from '../components/GiscusComments.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -202,8 +203,17 @@ watch(
       <!-- Markdown 渲染 -->
       <MarkdownRenderer :content="body" />
 
+      <!-- 帖子评论区 -->
+      <GiscusComments :term="`${symbolCode}/${dateParam}`" />
+
       <!-- 笔记列表 -->
-      <NoteList ref="noteListRef" :notes="currentNotes" @fullscreen="handleNoteFullscreen" />
+      <NoteList
+        ref="noteListRef"
+        :notes="currentNotes"
+        :symbol-code="symbolCode"
+        :date-param="dateParam"
+        @fullscreen="handleNoteFullscreen"
+      />
 
       <!-- 上/下篇导航 -->
       <nav class="mt-10 pt-6 border-t border-border-subtle flex items-center justify-between gap-4">

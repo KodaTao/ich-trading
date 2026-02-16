@@ -3,11 +3,20 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useGitHub } from '../composables/useGitHub.js'
 import { parseFrontmatter } from '../utils/frontmatter.js'
 import MarkdownRenderer from './MarkdownRenderer.vue'
+import GiscusComments from './GiscusComments.vue'
 
 const props = defineProps({
   notes: {
     type: Array,
     default: () => [],
+  },
+  symbolCode: {
+    type: String,
+    default: '',
+  },
+  dateParam: {
+    type: String,
+    default: '',
   },
 })
 
@@ -131,6 +140,12 @@ defineExpose({ scrollToLatest, loading })
         <div class="text-sm">
           <MarkdownRenderer :content="note.body" />
         </div>
+
+        <!-- 笔记评论区 -->
+        <GiscusComments
+          v-if="symbolCode && dateParam"
+          :term="`${symbolCode}/${dateParam}/note/${note.time}`"
+        />
       </article>
     </div>
   </section>
