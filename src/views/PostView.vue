@@ -7,6 +7,7 @@ import { parseFrontmatter } from '../utils/frontmatter.js'
 import MarkdownRenderer from '../components/MarkdownRenderer.vue'
 import NoteList from '../components/NoteList.vue'
 import TableOfContents from '../components/TableOfContents.vue'
+import FullscreenViewer from '../components/FullscreenViewer.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -25,6 +26,35 @@ const noteListRef = ref(null)
 const pageTopRef = ref(null)
 const contentRef = ref(null)
 const tocRefreshSignal = ref(0)
+
+// 全屏查看状态
+const fullscreenVisible = ref(false)
+const fullscreenTitle = ref('')
+const fullscreenContent = ref('')
+
+function openFullscreen(title, content) {
+  fullscreenTitle.value = title
+  fullscreenContent.value = content
+  fullscreenVisible.value = true
+}
+
+function closeFullscreen() {
+  fullscreenVisible.value = false
+}
+
+function openPostFullscreen() {
+  openFullscreen(
+    attributes.value.title || currentPost.value?.title || '正文',
+    body.value
+  )
+}
+
+function handleNoteFullscreen(note) {
+  openFullscreen(
+    note.title || note.time,
+    note.body
+  )
+}
 
 // 上一篇 / 下一篇导航
 const currentIndex = computed(() => {
@@ -158,11 +188,22 @@ watch(
         </div>
       </header>
 
+      <!-- 正文工具栏 -->
+      <div class="flex justify-end mb-3">
+        <button
+          @click="openPostFullscreen"
+          class="text-xs text-text-secondary hover:text-accent-blue transition-colors flex items-center gap-1"
+          title="全屏阅读"
+        >
+          <span>⛶</span> 全屏阅读
+        </button>
+      </div>
+
       <!-- Markdown 渲染 -->
       <MarkdownRenderer :content="body" />
 
       <!-- 笔记列表 -->
-      <NoteList ref="noteListRef" :notes="currentNotes" />
+      <NoteList ref="noteListRef" :notes="currentNotes" @fullscreen="handleNoteFullscreen" />
 
       <!-- 上/下篇导航 -->
       <nav class="mt-10 pt-6 border-t border-border-subtle flex items-center justify-between gap-4">
@@ -188,6 +229,15 @@ watch(
 
       <!-- TOC 悬浮导航 -->
       <TableOfContents :content-ref="contentRef" :refresh-signal="tocRefreshSignal" />
+
+      <!-- 全屏查看器 -->
+      <FullscreenViewer
+        :visible="fullscreenVisible"
+        :title="fullscreenTitle"
+        @close="closeFullscreen"
+      >
+        <MarkdownRenderer :content="fullscreenContent" />
+      </FullscreenViewer>
     </template>
   </div>
 </template>

@@ -11,6 +11,8 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['fullscreen'])
+
 const { loadMarkdown } = useGitHub()
 
 const loadedNotes = ref([])
@@ -105,13 +107,24 @@ defineExpose({ scrollToLatest, loading })
 
         <!-- 笔记头部 -->
         <div class="mb-3 pb-3 border-b border-border-subtle">
-          <div class="flex items-center gap-1.5 text-text-secondary text-xs mb-1">
-            <span class="text-accent-gold">●</span>
-            <span class="font-mono">{{ formatTime(note.time) }}</span>
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center gap-1.5 text-text-secondary text-xs mb-1">
+                <span class="text-accent-gold">●</span>
+                <span class="font-mono">{{ formatTime(note.time) }}</span>
+              </div>
+              <h3 v-if="note.title" class="text-text-primary font-semibold text-sm leading-snug">
+                {{ note.title }}
+              </h3>
+            </div>
+            <button
+              @click="emit('fullscreen', note)"
+              class="shrink-0 text-xs text-text-secondary hover:text-accent-blue transition-colors ml-2"
+              title="全屏查看"
+            >
+              ⛶
+            </button>
           </div>
-          <h3 v-if="note.title" class="text-text-primary font-semibold text-sm leading-snug">
-            {{ note.title }}
-          </h3>
         </div>
 
         <!-- 笔记内容 -->

@@ -113,3 +113,25 @@
 - [x] 17.3 数据加载迁移：生产环境从 GitHub Pages 自身加载 index.json 和 predictions/，替代 raw.githubusercontent.com ✅
 - [x] 17.4 部署流程优化：CI 构建后自动复制 index.json + predictions/ 到 dist/，index.json 和 predictions/ 变更也触发部署 ✅
 - [x] 17.5 帖子排序优化：post.md frontmatter 新增 date 字段用于排序，目录名（folder）用于显示和路由 ✅
+
+## 阶段十八：TOC 目录导航
+
+- [x] 18.1 markdown.js 自定义 heading_open 渲染规则，为 h1-h6 生成 slug ID（支持中文、同名去重） ✅
+- [x] 18.2 新建 TableOfContents.vue：悬浮按钮 + 底部抽屉，两级分组目录（正文 ■ + 笔记 ● + 子标题 └） ✅
+- [x] 18.3 IntersectionObserver 高亮当前可见标题，点击跳转并自动关闭抽屉 ✅
+- [x] 18.4 PostView 集成 TOC，正文和笔记加载后自动刷新目录 ✅
+
+## 阶段十九：体验优化与社区
+
+- [x] 19.1 Symbols 列表按最新帖子日期倒序排列 ✅
+- [x] 19.2 添加网站 favicon（ico + png），导航栏展示 logo ✅
+- [x] 19.3 添加 Telegram 频道和作者链接（README + 首页底部） ✅
+- [x] 19.4 修复轮询刷新页面闪烁：首次加载才显示 loading，后续静默更新；数据无变化不触发响应式 ✅
+- [x] 19.5 index.json 缓存优化：fetch 加 timestamp + cache: no-cache，SW 直接透传不缓存 ✅
+- [x] 19.6 轮询频率从 5 分钟缩短至 1 分钟 ✅
+
+## 阶段二十：全屏查看
+
+- [x] 20.1 新建 FullscreenViewer.vue：浏览器 Fullscreen API，顶部标题栏 + 关闭按钮，max-w-6xl 宽屏阅读 ✅
+- [x] 20.2 PostView 正文全屏按钮（⛶ 全屏阅读） ✅
+- [x] 20.3 NoteList 每条笔记全屏按钮，emit 事件由 PostView 处理 ✅
