@@ -16,7 +16,7 @@ const symbolCode = computed(() => route.params.symbol)
 const dateParam = computed(() => route.params.date)
 const symbol = computed(() => getSymbol(symbolCode.value))
 
-const loading = ref(false)
+const loading = ref(true)
 const error = ref(null)
 const body = ref('')
 const attributes = ref({})
