@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 
-const permission = ref(Notification?.permission || 'default')
-const supported = ref('Notification' in window)
+const supported = ref(typeof window !== 'undefined' && 'Notification' in window)
+const permission = ref(supported.value ? Notification.permission : 'default')
 
 /**
  * 请求通知权限
