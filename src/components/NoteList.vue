@@ -33,7 +33,7 @@ function formatTime(time) {
  * 滚动到最新笔记，供父组件调用
  */
 function scrollToLatest() {
-  latestNoteEl.value?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  latestNoteEl.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 async function loadAllNotes() {
