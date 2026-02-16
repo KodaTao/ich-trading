@@ -27,9 +27,9 @@ self.addEventListener('fetch', (event) => {
   const { request } = event
   const url = new URL(request.url)
 
-  // index.json → Network First
+  // index.json → 始终走网络，不缓存
   if (url.pathname.endsWith('/index.json') || url.href.includes('index.json')) {
-    event.respondWith(networkFirst(request, API_CACHE))
+    event.respondWith(fetch(request).catch(() => caches.match(request)))
     return
   }
 
