@@ -32,19 +32,31 @@ const initialized = ref(false)
  */
 async function loadIndex() {
   if (state.loading) return
-  state.loading = true
-  state.error = null
+  // 首次加载才显示全局 loading，后续轮询静默更新
+  const isFirstLoad = !initialized.value
+  if (isFirstLoad) {
+    state.loading = true
+    state.error = null
+  }
 
   try {
     const url = `${RAW_BASE}/index.json?t=${Date.now()}`
     const res = await fetch(url, { cache: 'no-cache' })
     if (!res.ok) throw new Error(`加载索引失败: ${res.status}`)
-    state.index = await res.json()
+    const newData = await res.json()
+    // 数据有变化才更新，避免不必要的响应式触发
+    if (JSON.stringify(newData) !== JSON.stringify(state.index)) {
+      state.index = newData
+    }
     initialized.value = true
   } catch (err) {
-    state.error = err.message
+    if (isFirstLoad) {
+      state.error = err.message
+    }
   } finally {
-    state.loading = false
+    if (isFirstLoad) {
+      state.loading = false
+    }
   }
 }
 

@@ -10,7 +10,7 @@ const { state, loadIndex } = useGitHub()
 const { checkForUpdates } = useUpdateChecker()
 const { requestPermission } = useNotification()
 
-const POLL_INTERVAL = 5 * 60 * 1000 // 5 分钟
+const POLL_INTERVAL = 60 * 1000 // 1 分钟
 let pollTimer = null
 
 onMounted(async () => {
