@@ -2,7 +2,7 @@ import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 
 const md = new MarkdownIt({
-  html: false,
+  html: true,
   linkify: true,
   typographer: true,
   highlight(str, lang) {
