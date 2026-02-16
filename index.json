@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-16T04:51:21.824Z",
+  "lastUpdated": "2026-02-16T05:01:39.139Z",
   "symbols": {
     "BTC": {
       "name": "Bitcoin",
@@ -12,11 +12,23 @@
           "subtitle": "乾卦九五，飞龙在天",
           "summary": "本周比特币走势强劲，卦象显示上行动力充足，但需注意变爻警示。",
           "format": "md",
-          "path": "predictions/BTC/2026-02-16.md",
+          "path": "predictions/BTC/2026-02-16/post.md",
           "tags": [
             "看涨",
             "乾卦",
             "变爻"
+          ],
+          "notes": [
+            {
+              "time": "2026-02-16T14:30",
+              "title": "盘中追踪：突破 $100,000 关口",
+              "path": "predictions/BTC/2026-02-16/notes/2026-02-16T14-30.md"
+            },
+            {
+              "time": "2026-02-17T09:00",
+              "title": "次日复盘：高位震荡整理",
+              "path": "predictions/BTC/2026-02-16/notes/2026-02-17T09-00.md"
+            }
           ]
         },
         {
@@ -25,11 +37,12 @@
           "subtitle": "坤卦六四，括囊无咎",
           "summary": "市场进入调整期，坤卦提示以守为主，不宜激进操作。",
           "format": "md",
-          "path": "predictions/BTC/2026-02-10.md",
+          "path": "predictions/BTC/2026-02-10/post.md",
           "tags": [
             "震荡",
             "坤卦"
-          ]
+          ],
+          "notes": []
         }
       ]
     },
@@ -44,12 +57,13 @@
           "subtitle": "兑卦九四，商兑未宁",
           "summary": "以太坊短期面临方向选择，兑卦提示需耐心等待突破信号。",
           "format": "md",
-          "path": "predictions/ETH/2026-02-16.md",
+          "path": "predictions/ETH/2026-02-16/post.md",
           "tags": [
             "震荡",
             "兑卦",
             "观望"
-          ]
+          ],
+          "notes": []
         },
         {
           "date": "2026-02-15",
@@ -57,11 +71,12 @@
           "subtitle": "离卦六二，黄离元吉",
           "summary": "以太坊呈现温和上涨趋势，离卦中正之位暗示稳健发展。",
           "format": "md",
-          "path": "predictions/ETH/2026-02-15.md",
+          "path": "predictions/ETH/2026-02-15/post.md",
           "tags": [
             "看涨",
             "离卦"
-          ]
+          ],
+          "notes": []
         }
       ]
     }

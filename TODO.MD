@@ -73,13 +73,21 @@
 
 ## 阶段十二：浏览器通知（Browser Notification）
 
-- [ ] 12.1 编写 `composables/useNotification.js` — 封装通知权限请求、发送通知、点击跳转逻辑
-- [ ] 12.2 修改 `useUpdateChecker.js` — 检测到更新时调用浏览器通知
-- [ ] 12.3 修改 `App.vue` — 启动时请求通知权限 + 启动 5 分钟定时轮询 index.json
-- [ ] 12.4 测试验证（权限请求、新内容通知、后台轮询、点击通知跳转）
+- [x] 12.1 编写 `composables/useNotification.js` — 封装通知权限请求、发送通知、点击跳转逻辑
+- [x] 12.2 修改 `useUpdateChecker.js` — 检测到更新时调用浏览器通知
+- [x] 12.3 修改 `App.vue` — 启动时请求通知权限 + 启动 5 分钟定时轮询 index.json
+- [x] 12.4 测试验证（权限请求、新内容通知、后台轮询、点击通知跳转） ✅
 
-## 阶段十三：响应式与细节优化
+## 阶段十三：笔记（Notes）功能
 
-- [ ] 12.1 移动端适配检查（卡片网格、表格横滚、代码块横滚、触摸区域 44×44px）
-- [ ] 12.2 页面过渡动画调优（淡入 + translateY、卡片 staggered 动画）
-- [ ] 12.3 性能检查（动画仅用 transform/opacity、图片懒加载等）
+- [ ] 13.1 迁移现有 predictions 目录结构（扁平文件 → 目录形式）
+- [ ] 13.2 修改 `generate-index.js` — 支持新目录结构 + 扫描 notes 子目录 + 向后兼容扁平文件
+- [ ] 13.3 新增 `components/NoteList.vue` — 笔记列表组件（时间、标题、Markdown 渲染）
+- [ ] 13.4 修改 `PostView.vue` — 底部集成笔记列表，加载并渲染笔记
+- [ ] 13.5 创建示例笔记数据 + 测试验证
+
+## 阶段十四：响应式与细节优化
+
+- [ ] 14.1 移动端适配检查（卡片网格、表格横滚、代码块横滚、触摸区域 44×44px）
+- [ ] 14.2 页面过渡动画调优（淡入 + translateY、卡片 staggered 动画）
+- [ ] 14.3 性能检查（动画仅用 transform/opacity、图片懒加载等）

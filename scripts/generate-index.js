@@ -5,10 +5,55 @@ import matter from 'gray-matter'
 const PREDICTIONS_DIR = path.resolve('predictions')
 const OUTPUT_FILE = path.resolve('index.json')
 
+/**
+ * 解析单个 .md 文件的 frontmatter
+ */
+function parseMdFile(filePath) {
+  const rawContent = fs.readFileSync(filePath, 'utf-8')
+  let data = {}
+  let content = rawContent
+  try {
+    const parsed = matter(rawContent)
+    data = parsed.data
+    content = parsed.content
+  } catch {
+    console.warn(`警告: ${filePath} frontmatter 解析失败`)
+  }
+  return { data, content }
+}
+
+/**
+ * 扫描 notes 目录，返回笔记列表
+ */
+function scanNotes(notesDir, symbolCode, date) {
+  if (!fs.existsSync(notesDir)) return []
+
+  const noteFiles = fs
+    .readdirSync(notesDir)
+    .filter((f) => f.endsWith('.md'))
+    .sort() // 按文件名（时间戳）正序
+
+  const notes = []
+  for (const noteFile of noteFiles) {
+    const filePath = path.join(notesDir, noteFile)
+    const { data } = parseMdFile(filePath)
+
+    // 从文件名提取时间：2026-02-16T14-30.md → 2026-02-16T14:30
+    const time = noteFile.replace(/\.md$/, '').replace(/-(\d{2})$/, ':$1')
+
+    notes.push({
+      time,
+      title: data.title || '',
+      path: `predictions/${symbolCode}/${date}/notes/${noteFile}`,
+    })
+  }
+
+  return notes
+}
+
 function generateIndex() {
   const symbols = {}
 
-  // 读取 predictions/ 下所有子目录
   if (!fs.existsSync(PREDICTIONS_DIR)) {
     console.error('predictions/ 目录不存在')
     process.exit(1)
@@ -28,35 +73,47 @@ function generateIndex() {
     if (fs.existsSync(metaPath)) {
       try {
         meta = { ...meta, ...JSON.parse(fs.readFileSync(metaPath, 'utf-8')) }
-      } catch (err) {
+      } catch {
         console.warn(`警告: ${metaPath} 解析失败，使用默认值`)
       }
     }
 
-    // 扫描 .md 文件
-    const mdFiles = fs
-      .readdirSync(symbolDir)
-      .filter((f) => f.endsWith('.md'))
-
     const posts = []
+    const entries = fs.readdirSync(symbolDir, { withFileTypes: true })
 
-    for (const mdFile of mdFiles) {
-      const filePath = path.join(symbolDir, mdFile)
-      const rawContent = fs.readFileSync(filePath, 'utf-8')
+    for (const entry of entries) {
+      // 跳过 meta.json
+      if (entry.name === 'meta.json') continue
 
-      // 解析 frontmatter
-      let data = {}
-      let content = rawContent
-      try {
-        const parsed = matter(rawContent)
+      let date, postPath, data, content, notes
+
+      if (entry.isDirectory()) {
+        // 目录形式：2026-02-16/post.md
+        date = entry.name
+        const postFile = path.join(symbolDir, entry.name, 'post.md')
+        if (!fs.existsSync(postFile)) continue
+
+        const parsed = parseMdFile(postFile)
         data = parsed.data
         content = parsed.content
-      } catch {
-        console.warn(`警告: ${filePath} frontmatter 解析失败`)
-      }
+        postPath = `predictions/${symbolCode}/${date}/post.md`
 
-      // 从文件名提取日期
-      const date = mdFile.replace(/\.md$/, '')
+        // 扫描 notes
+        const notesDir = path.join(symbolDir, entry.name, 'notes')
+        notes = scanNotes(notesDir, symbolCode, date)
+      } else if (entry.name.endsWith('.md')) {
+        // 扁平文件形式（向后兼容）：2026-02-16.md
+        date = entry.name.replace(/\.md$/, '')
+        const filePath = path.join(symbolDir, entry.name)
+
+        const parsed = parseMdFile(filePath)
+        data = parsed.data
+        content = parsed.content
+        postPath = `predictions/${symbolCode}/${entry.name}`
+        notes = []
+      } else {
+        continue
+      }
 
       // 提取 title
       let title = data.title
@@ -71,8 +128,9 @@ function generateIndex() {
         subtitle: data.subtitle || null,
         summary: data.summary || null,
         format: 'md',
-        path: `predictions/${symbolCode}/${mdFile}`,
+        path: postPath,
         tags: data.tags || [],
+        notes,
       })
     }
 
@@ -93,7 +151,15 @@ function generateIndex() {
   }
 
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(indexData, null, 2), 'utf-8')
-  console.log(`✅ index.json 已生成，包含 ${Object.keys(symbols).length} 个 symbol`)
+
+  // 统计
+  let totalNotes = 0
+  for (const sym of Object.values(symbols)) {
+    for (const post of sym.posts) {
+      totalNotes += post.notes.length
+    }
+  }
+  console.log(`✅ index.json 已生成，包含 ${Object.keys(symbols).length} 个 symbol，${totalNotes} 条笔记`)
 }
 
 generateIndex()

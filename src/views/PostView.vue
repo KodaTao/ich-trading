@@ -5,6 +5,7 @@ import { useGitHub } from '../composables/useGitHub.js'
 import { useUpdateChecker } from '../composables/useUpdateChecker.js'
 import { parseFrontmatter } from '../utils/frontmatter.js'
 import MarkdownRenderer from '../components/MarkdownRenderer.vue'
+import NoteList from '../components/NoteList.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -39,6 +40,11 @@ const nextPost = computed(() => {
 const currentPost = computed(() => {
   if (!symbol.value?.posts) return null
   return symbol.value.posts[currentIndex.value] || null
+})
+
+// 当前帖子的笔记列表
+const currentNotes = computed(() => {
+  return currentPost.value?.notes || []
 })
 
 async function loadContent() {
@@ -114,6 +120,9 @@ watch(() => route.params, loadContent)
 
       <!-- Markdown 渲染 -->
       <MarkdownRenderer :content="body" />
+
+      <!-- 笔记列表 -->
+      <NoteList :notes="currentNotes" />
 
       <!-- 上/下篇导航 -->
       <nav class="mt-10 pt-6 border-t border-border-subtle flex items-center justify-between gap-4">
