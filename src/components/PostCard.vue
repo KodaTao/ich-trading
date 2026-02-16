@@ -61,7 +61,7 @@ function navigateToPost() {
       <span
         v-for="tag in tags"
         :key="tag"
-        class="text-xs px-2 py-0.5 rounded-full bg-accent-blue/10 text-accent-blue/80"
+        class="text-xs px-2.5 py-1 rounded-full bg-accent-blue/10 text-accent-blue/80"
       >
         {{ tag }}
       </span>

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 移动端点击高亮消除 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* 全局滚动条暗黑主题 */
 ::-webkit-scrollbar {
   width: 6px;
@@ -51,4 +56,14 @@
 .slide-down-leave-to {
   transform: translateY(-100%);
   opacity: 0;
+}
+
+/* 尊重用户减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .fade-slide-enter-active,
+  .fade-slide-leave-active,
+  .slide-down-enter-active,
+  .slide-down-leave-active {
+    transition-duration: 0.01ms !important;
+  }
 }

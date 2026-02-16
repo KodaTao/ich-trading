@@ -36,7 +36,7 @@ function clearAll() {
   <div v-if="tags.length" class="flex flex-wrap items-center gap-2 mb-4">
     <button
       @click="clearAll"
-      class="text-xs px-3 py-1 rounded-full transition-colors"
+      class="text-xs px-3 py-1.5 rounded-full transition-colors"
       :class="
         selectedTags.length === 0
           ? 'bg-accent-blue/20 text-accent-blue'
@@ -49,7 +49,7 @@ function clearAll() {
       v-for="tag in tags"
       :key="tag"
       @click="toggleTag(tag)"
-      class="text-xs px-3 py-1 rounded-full transition-colors"
+      class="text-xs px-3 py-1.5 rounded-full transition-colors"
       :class="
         isSelected(tag)
           ? 'bg-accent-blue/20 text-accent-blue'

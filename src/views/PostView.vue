@@ -20,6 +20,8 @@ const loading = ref(false)
 const error = ref(null)
 const body = ref('')
 const attributes = ref({})
+const noteListRef = ref(null)
+const pageTopRef = ref(null)
 
 // 上一篇 / 下一篇导航
 const currentIndex = computed(() => {
@@ -47,6 +49,17 @@ const currentNotes = computed(() => {
   return currentPost.value?.notes || []
 })
 
+/**
+ * 点击 header 标题：有笔记则跳到最新笔记，无笔记则回到顶部
+ */
+function handleHeaderClick() {
+  if (currentNotes.value.length > 0) {
+    noteListRef.value?.scrollToLatest()
+  } else {
+    pageTopRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
 async function loadContent() {
   if (!currentPost.value) return
   loading.value = true
@@ -72,7 +85,7 @@ watch(() => route.params, loadContent)
 </script>
 
 <template>
-  <div class="max-w-3xl mx-auto px-4 py-6">
+  <div ref="pageTopRef" class="max-w-3xl mx-auto px-4 py-6">
     <!-- 加载中 -->
     <div v-if="loading" class="flex items-center justify-center py-20">
       <div class="text-text-secondary text-sm">加载中...</div>
@@ -85,7 +98,7 @@ watch(() => route.params, loadContent)
 
     <!-- 内容 -->
     <template v-else>
-      <!-- Meta 区域 -->
+      <!-- Meta 区域 — 点击标题跳转最新笔记或回顶 -->
       <header class="mb-8">
         <div class="flex items-center gap-2 mb-3">
           <router-link
@@ -99,7 +112,11 @@ watch(() => route.params, loadContent)
           <span class="text-text-secondary text-xs font-mono">{{ dateParam }}</span>
         </div>
 
-        <h1 class="text-2xl font-bold text-text-primary mb-2">
+        <h1
+          @click="handleHeaderClick"
+          class="text-2xl font-bold text-text-primary mb-2 cursor-pointer hover:text-accent-blue transition-colors"
+          :title="currentNotes.length > 0 ? '点击跳转最新笔记' : '点击回到顶部'"
+        >
           {{ attributes.title || currentPost?.title }}
         </h1>
 
@@ -111,7 +128,7 @@ watch(() => route.params, loadContent)
           <span
             v-for="tag in attributes.tags || currentPost?.tags"
             :key="tag"
-            class="text-xs px-2 py-0.5 rounded-full bg-accent-blue/10 text-accent-blue/80"
+            class="text-xs px-2.5 py-1 rounded-full bg-accent-blue/10 text-accent-blue/80"
           >
             {{ tag }}
           </span>
@@ -122,7 +139,7 @@ watch(() => route.params, loadContent)
       <MarkdownRenderer :content="body" />
 
       <!-- 笔记列表 -->
-      <NoteList :notes="currentNotes" />
+      <NoteList ref="noteListRef" :notes="currentNotes" />
 
       <!-- 上/下篇导航 -->
       <nav class="mt-10 pt-6 border-t border-border-subtle flex items-center justify-between gap-4">

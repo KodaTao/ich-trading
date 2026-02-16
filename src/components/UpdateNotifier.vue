@@ -33,13 +33,13 @@ function handleClose() {
         <div class="flex items-center gap-2 shrink-0">
           <button
             @click="handleView"
-            class="text-xs px-3 py-1.5 bg-accent-blue/20 text-accent-blue rounded hover:bg-accent-blue/30 transition-colors"
+            class="text-sm px-4 py-2 bg-accent-blue/20 text-accent-blue rounded hover:bg-accent-blue/30 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             查看
           </button>
           <button
             @click="markAllRead(state.index)"
-            class="text-xs px-3 py-1.5 text-text-secondary hover:text-text-primary transition-colors"
+            class="text-sm px-4 py-2 text-text-secondary hover:text-text-primary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             关闭
           </button>

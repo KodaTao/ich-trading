@@ -80,14 +80,14 @@
 
 ## 阶段十三：笔记（Notes）功能
 
-- [ ] 13.1 迁移现有 predictions 目录结构（扁平文件 → 目录形式）
-- [ ] 13.2 修改 `generate-index.js` — 支持新目录结构 + 扫描 notes 子目录 + 向后兼容扁平文件
-- [ ] 13.3 新增 `components/NoteList.vue` — 笔记列表组件（时间、标题、Markdown 渲染）
-- [ ] 13.4 修改 `PostView.vue` — 底部集成笔记列表，加载并渲染笔记
-- [ ] 13.5 创建示例笔记数据 + 测试验证
+- [x] 13.1 迁移现有 predictions 目录结构（扁平文件 → 目录形式） ✅
+- [x] 13.2 修改 `generate-index.js` — 支持新目录结构 + 扫描 notes 子目录 + 向后兼容扁平文件 ✅
+- [x] 13.3 新增 `components/NoteList.vue` — 笔记列表组件（时间轴 UI、Markdown 渲染） ✅
+- [x] 13.4 修改 `PostView.vue` — 底部集成笔记列表，加载并渲染笔记 ✅
+- [x] 13.5 创建示例笔记数据 + 测试验证 ✅
 
 ## 阶段十四：响应式与细节优化
 
-- [ ] 14.1 移动端适配检查（卡片网格、表格横滚、代码块横滚、触摸区域 44×44px）
-- [ ] 14.2 页面过渡动画调优（淡入 + translateY、卡片 staggered 动画）
-- [ ] 14.3 性能检查（动画仅用 transform/opacity、图片懒加载等）
+- [x] 14.1 移动端适配检查（表格/代码块横滚触摸优化、标签/按钮触摸区域增大、移动端字体缩放） ✅
+- [x] 14.2 页面过渡动画调优（已有 fadeInUp staggered 动画 + 页面 fade-slide 过渡，新增 prefers-reduced-motion 支持） ✅
+- [x] 14.3 性能检查（动画仅用 transform/opacity、消除移动端点击高亮、prefers-reduced-motion 全局支持） ✅

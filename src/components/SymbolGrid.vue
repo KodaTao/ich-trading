@@ -72,4 +72,11 @@ function navigateToSymbol(code) {
     transform: translateY(0);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none !important;
+    opacity: 1;
+  }
+}
 </style>
