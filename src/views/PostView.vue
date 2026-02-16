@@ -1,11 +1,12 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGitHub } from '../composables/useGitHub.js'
 import { useUpdateChecker } from '../composables/useUpdateChecker.js'
 import { parseFrontmatter } from '../utils/frontmatter.js'
 import MarkdownRenderer from '../components/MarkdownRenderer.vue'
 import NoteList from '../components/NoteList.vue'
+import TableOfContents from '../components/TableOfContents.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -22,6 +23,8 @@ const body = ref('')
 const attributes = ref({})
 const noteListRef = ref(null)
 const pageTopRef = ref(null)
+const contentRef = ref(null)
+const tocRefreshSignal = ref(0)
 
 // 上一篇 / 下一篇导航
 const currentIndex = computed(() => {
@@ -86,6 +89,21 @@ watch(() => route.params, loadContent)
 watch(currentPost, (newVal, oldVal) => {
   if (newVal && !oldVal) loadContent()
 })
+
+// 正文加载完成后刷新 TOC
+watch(body, () => {
+  nextTick(() => tocRefreshSignal.value++)
+})
+
+// 笔记加载完成后刷新 TOC
+watch(
+  () => noteListRef.value?.loading,
+  (newLoading, oldLoading) => {
+    if (oldLoading === true && newLoading === false) {
+      nextTick(() => tocRefreshSignal.value++)
+    }
+  }
+)
 </script>
 
 <template>
@@ -102,6 +120,7 @@ watch(currentPost, (newVal, oldVal) => {
 
     <!-- 内容 -->
     <template v-else>
+      <div ref="contentRef">
       <!-- Meta 区域 — 点击标题跳转最新笔记或回顶 -->
       <header class="mb-8">
         <div class="flex items-center gap-2 mb-3">
@@ -165,6 +184,10 @@ watch(currentPost, (newVal, oldVal) => {
         </router-link>
         <span v-else />
       </nav>
+      </div>
+
+      <!-- TOC 悬浮导航 -->
+      <TableOfContents :content-ref="contentRef" :refresh-signal="tocRefreshSignal" />
     </template>
   </div>
 </template>
