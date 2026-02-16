@@ -46,10 +46,10 @@ function checkForUpdates(indexData) {
     if (!readState) continue
 
     const savedDate = readState.symbols?.[code]
-    if (!savedDate) {
-      // 新 symbol
+    if (!savedDate && latestDate) {
+      // 新 symbol 且有帖子
       updated.push(code)
-    } else if (latestDate > savedDate) {
+    } else if (latestDate && latestDate > savedDate) {
       // 有新的预测
       updated.push(code)
     }
