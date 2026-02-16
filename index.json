@@ -1,0 +1,56 @@
+{
+  "lastUpdated": "2026-02-16T04:30:55.000Z",
+  "symbols": {
+    "BTC": {
+      "name": "Bitcoin",
+      "description": "比特币易经预测",
+      "icon": "₿",
+      "posts": [
+        {
+          "date": "2026-02-16",
+          "title": "比特币周易预测",
+          "subtitle": "乾卦九五，飞龙在天",
+          "summary": "本周比特币走势强劲，卦象显示上行动力充足，但需注意变爻警示。",
+          "format": "md",
+          "path": "predictions/BTC/2026-02-16.md",
+          "tags": [
+            "看涨",
+            "乾卦",
+            "变爻"
+          ]
+        },
+        {
+          "date": "2026-02-10",
+          "title": "比特币本周预测",
+          "subtitle": "坤卦六四，括囊无咎",
+          "summary": "市场进入调整期，坤卦提示以守为主，不宜激进操作。",
+          "format": "md",
+          "path": "predictions/BTC/2026-02-10.md",
+          "tags": [
+            "震荡",
+            "坤卦"
+          ]
+        }
+      ]
+    },
+    "ETH": {
+      "name": "Ethereum",
+      "description": "以太坊易经预测",
+      "icon": "⟠",
+      "posts": [
+        {
+          "date": "2026-02-15",
+          "title": "以太坊周易预测",
+          "subtitle": "离卦六二，黄离元吉",
+          "summary": "以太坊呈现温和上涨趋势，离卦中正之位暗示稳健发展。",
+          "format": "md",
+          "path": "predictions/ETH/2026-02-15.md",
+          "tags": [
+            "看涨",
+            "离卦"
+          ]
+        }
+      ]
+    }
+  }
+}
