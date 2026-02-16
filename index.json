@@ -1,6 +1,46 @@
 {
-  "lastUpdated": "2026-02-16T05:32:09.067Z",
+  "lastUpdated": "2026-02-16T06:22:29.079Z",
   "symbols": {
+    "01810.HK": {
+      "name": "小米集团-W",
+      "description": "小米集团易经预测",
+      "icon": "📱",
+      "posts": []
+    },
+    "03690.HK": {
+      "name": "美团-W",
+      "description": "美团易经预测",
+      "icon": "🛵",
+      "posts": []
+    },
+    "ETH-USDT": {
+      "name": "Ethereum",
+      "description": "以太坊/USDT 易经预测",
+      "icon": "⟠",
+      "posts": [
+        {
+          "date": "2026-02-16周",
+          "title": "姤->火！春节红包行情的ETH",
+          "subtitle": "风云际会，火中取栗",
+          "summary": "本周绝非“垃圾时间”。日冲月建，加上三爻乱动，市场将出现宽幅震荡（插针行情）。多空双杀的概率极大。",
+          "format": "md",
+          "path": "predictions/ETH-USDT/2026-02-16周/post.md",
+          "tags": [
+            "插针",
+            "宽幅震荡",
+            "姤卦",
+            "离卦"
+          ],
+          "notes": []
+        }
+      ]
+    },
+    "HSTECH": {
+      "name": "恒生科技指数",
+      "description": "恒生科技指数易经预测",
+      "icon": "📡",
+      "posts": []
+    },
     "TEMPLATE": {
       "name": "模板",
       "description": "预测模板示例，可参考此格式创建新的预测",
