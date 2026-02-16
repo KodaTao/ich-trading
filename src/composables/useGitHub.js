@@ -63,10 +63,16 @@ async function loadMarkdown(path) {
  */
 function getSymbols() {
   if (!state.index) return []
-  return Object.entries(state.index.symbols).map(([code, data]) => ({
-    code,
-    ...data,
-  }))
+  return Object.entries(state.index.symbols)
+    .map(([code, data]) => ({
+      code,
+      ...data,
+    }))
+    .sort((a, b) => {
+      const dateA = a.posts?.[0]?.date || ''
+      const dateB = b.posts?.[0]?.date || ''
+      return dateB.localeCompare(dateA)
+    })
 }
 
 /**

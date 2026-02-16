@@ -21,8 +21,8 @@ const { state } = useGitHub()
 
     <!-- 内容 -->
     <template v-else>
-      <LatestPosts />
       <SymbolGrid />
+      <LatestPosts />
     </template>
   </div>
 </template>
