@@ -705,7 +705,40 @@ git push
 
 ---
 
-## 十三、后续扩展（暂不实现，架构预留）
+## 十三、浏览器通知（Browser Notification）
+
+### 13.1 功能概述
+
+利用浏览器原生 Notification API，当有新预测发布时，即使页面在后台也能推送通知给用户。
+
+### 13.2 触发时机
+
+1. **页面打开/刷新时**：检测到新预测发布，弹出浏览器通知
+2. **后台定时轮询**：页面打开后，每 5 分钟轮询 index.json，检测到新内容时弹出通知（即使页面在后台标签页）
+
+### 13.3 权限请求
+
+- 页面加载后**自动请求**通知权限（`Notification.requestPermission()`）
+- 用户授权后才能发送通知
+- 用户拒绝后不再重复请求
+
+### 13.4 通知内容
+
+- **标题**：`ICH Trading — 新预测发布`
+- **正文**：具体更新的 symbol，如 `BTC、ETH 有新的预测发布`
+- **点击通知**：聚焦/打开页面，跳转首页
+
+### 13.5 技术实现
+
+- 新增 `composables/useNotification.js` — 封装通知权限请求、发送通知逻辑
+- 修改 `useUpdateChecker.js` — 检测到更新时调用通知
+- 修改 `App.vue` — 启动时请求通知权限 + 启动定时轮询
+- 轮询间隔：5 分钟（300000ms），使用 `setInterval`
+- 轮询时对比 index.json 的 `lastUpdated` 字段，变化时才进行详细对比
+
+---
+
+## 十四、后续扩展（暂不实现，架构预留）
 
 - **多主题切换**：已预留 `ThemeToggle` 组件和 `useTheme` composable（古风水墨、简洁明亮等）
 - **搜索功能**：前端内存中对 index.json 的 title / summary / tags 全文搜索

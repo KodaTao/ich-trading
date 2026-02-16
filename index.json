@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-16T04:30:55.000Z",
+  "lastUpdated": "2026-02-16T04:51:21.824Z",
   "symbols": {
     "BTC": {
       "name": "Bitcoin",
@@ -38,6 +38,19 @@
       "description": "以太坊易经预测",
       "icon": "⟠",
       "posts": [
+        {
+          "date": "2026-02-16",
+          "title": "以太坊最新预测",
+          "subtitle": "兑卦九四，商兑未宁",
+          "summary": "以太坊短期面临方向选择，兑卦提示需耐心等待突破信号。",
+          "format": "md",
+          "path": "predictions/ETH/2026-02-16.md",
+          "tags": [
+            "震荡",
+            "兑卦",
+            "观望"
+          ]
+        },
         {
           "date": "2026-02-15",
           "title": "以太坊周易预测",

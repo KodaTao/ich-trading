@@ -1,9 +1,13 @@
 import { ref, computed } from 'vue'
+import { useNotification } from './useNotification.js'
 
 const STORAGE_KEY = 'ich-read-state'
 
 const updatedSymbols = ref([])
 const hasUpdate = computed(() => updatedSymbols.value.length > 0)
+
+// 记录上次通知对应的 lastUpdated，防止轮询重复通知
+let lastNotifiedTimestamp = ''
 
 /**
  * 从 localStorage 读取已读状态
@@ -52,6 +56,14 @@ function checkForUpdates(indexData) {
   }
 
   updatedSymbols.value = updated
+
+  // 有更新时发送浏览器通知（避免重复通知同一次更新）
+  const currentTimestamp = indexData.lastUpdated || ''
+  if (updated.length > 0 && currentTimestamp !== lastNotifiedTimestamp) {
+    lastNotifiedTimestamp = currentTimestamp
+    const { sendNotification } = useNotification()
+    sendNotification(updated)
+  }
 
   // 首次访问，初始化 read-state
   if (!readState) {
