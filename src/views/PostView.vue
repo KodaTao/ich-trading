@@ -82,6 +82,10 @@ async function loadContent() {
 
 onMounted(loadContent)
 watch(() => route.params, loadContent)
+// 刷新页面时 index.json 异步加载，currentPost 从 null 变为有值时需重新加载内容
+watch(currentPost, (newVal, oldVal) => {
+  if (newVal && !oldVal) loadContent()
+})
 </script>
 
 <template>
