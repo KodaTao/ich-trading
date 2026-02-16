@@ -122,8 +122,12 @@ function generateIndex() {
         title = h1Match ? h1Match[1] : date
       }
 
+      // 优先使用 frontmatter 中的 date 字段，否则用目录名
+      const postDate = data.date || date
+
       posts.push({
-        date,
+        date: postDate,
+        folder: date,
         title,
         subtitle: data.subtitle || null,
         summary: data.summary || null,
@@ -134,7 +138,7 @@ function generateIndex() {
       })
     }
 
-    // 按日期倒序
+    // 按 date 字段倒序排列
     posts.sort((a, b) => b.date.localeCompare(a.date))
 
     symbols[symbolCode] = {

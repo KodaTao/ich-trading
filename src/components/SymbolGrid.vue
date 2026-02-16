@@ -48,8 +48,8 @@ function navigateToSymbol(code) {
         <!-- 统计 -->
         <div class="text-text-secondary text-xs flex items-center justify-center gap-2">
           <span v-if="symbol.posts?.length">{{ symbol.posts.length }} 篇预测</span>
-          <span v-if="symbol.posts?.[0]?.date" class="font-mono">
-            {{ symbol.posts[0].date }}
+          <span v-if="symbol.posts?.[0]?.folder" class="font-mono">
+            {{ symbol.posts[0].folder }}
           </span>
         </div>
       </div>

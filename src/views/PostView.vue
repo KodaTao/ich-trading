@@ -26,7 +26,7 @@ const pageTopRef = ref(null)
 // 上一篇 / 下一篇导航
 const currentIndex = computed(() => {
   if (!symbol.value?.posts) return -1
-  return symbol.value.posts.findIndex((p) => p.date === dateParam.value)
+  return symbol.value.posts.findIndex((p) => p.folder === dateParam.value)
 })
 
 const prevPost = computed(() => {
@@ -113,7 +113,7 @@ watch(currentPost, (newVal, oldVal) => {
             <span class="font-display font-semibold">{{ symbolCode }}</span>
           </router-link>
           <span class="text-text-secondary text-xs">·</span>
-          <span class="text-text-secondary text-xs font-mono">{{ dateParam }}</span>
+          <span class="text-text-secondary text-xs font-mono">{{ currentPost?.folder || dateParam }}</span>
         </div>
 
         <h1
@@ -149,19 +149,19 @@ watch(currentPost, (newVal, oldVal) => {
       <nav class="mt-10 pt-6 border-t border-border-subtle flex items-center justify-between gap-4">
         <router-link
           v-if="prevPost"
-          :to="`/${symbolCode}/${prevPost.date}`"
+          :to="`/${symbolCode}/${prevPost.folder}`"
           class="text-sm text-text-secondary hover:text-accent-blue transition-colors"
         >
-          ← {{ prevPost.date }}
+          ← {{ prevPost.folder }}
         </router-link>
         <span v-else />
 
         <router-link
           v-if="nextPost"
-          :to="`/${symbolCode}/${nextPost.date}`"
+          :to="`/${symbolCode}/${nextPost.folder}`"
           class="text-sm text-text-secondary hover:text-accent-blue transition-colors"
         >
-          {{ nextPost.date }} →
+          {{ nextPost.folder }} →
         </router-link>
         <span v-else />
       </nav>

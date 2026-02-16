@@ -10,10 +10,10 @@ function getBaseUrl() {
   const host = window.location.hostname
   const isDev = host === 'localhost' || host === '127.0.0.1'
   if (isDev) {
-    // 开发环境：从 Vite dev server 加载本地文件
     return ''
   }
-  return GITHUB_RAW
+  // 生产环境从 GitHub Pages 自身加载（index.json 和 predictions/ 已复制到 dist/）
+  return import.meta.env.BASE_URL.replace(/\/$/, '')
 }
 
 const RAW_BASE = getBaseUrl()
@@ -36,7 +36,7 @@ async function loadIndex() {
   state.error = null
 
   try {
-    const url = `${RAW_BASE}/index.json?t=${Date.now()}`
+    const url = `${RAW_BASE}/index.json`
     const res = await fetch(url)
     if (!res.ok) throw new Error(`加载索引失败: ${res.status}`)
     state.index = await res.json()

@@ -76,11 +76,12 @@ if (symbol.value?.posts?.[0]?.date) {
       <div class="flex flex-col gap-3">
         <PostCard
           v-for="(post, index) in filteredPosts"
-          :key="post.date"
+          :key="post.folder"
           :symbol-code="symbol.code"
           :symbol-name="symbol.name"
           :symbol-icon="symbol.icon"
           :date="post.date"
+          :folder="post.folder"
           :title="post.title"
           :subtitle="post.subtitle"
           :summary="post.summary"

@@ -6,6 +6,7 @@ const props = defineProps({
   symbolName: String,
   symbolIcon: String,
   date: String,
+  folder: String,
   title: String,
   subtitle: String,
   summary: String,
@@ -22,7 +23,7 @@ const props = defineProps({
 const router = useRouter()
 
 function navigateToPost() {
-  router.push(`/${props.symbolCode}/${props.date}`)
+  router.push(`/${props.symbolCode}/${props.folder}`)
 }
 </script>
 
@@ -38,7 +39,7 @@ function navigateToPost() {
         <span class="text-accent-blue font-display text-sm font-semibold">{{ symbolCode }}</span>
         <span v-if="symbolName" class="text-text-secondary text-xs">{{ symbolName }}</span>
       </div>
-      <span class="text-text-secondary text-xs font-mono">{{ date }}</span>
+      <span class="text-text-secondary text-xs font-mono">{{ folder }}</span>
     </div>
 
     <!-- 标题 -->

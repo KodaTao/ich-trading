@@ -15,11 +15,13 @@ ICH Trading 是一个个人易经预测发布平台。作者（KodaTao）会定�
 ### 1.2 核心特性
 
 - 按 symbol（股票代码/加密货币代码）分类浏览预测报告
-- Markdown 渲染，支持表格、代码块、Mermaid 图表
-- 新内容更新提示（精确到具体哪些 symbol 有更新）
-- 移动端优先的响应式设计
+- Markdown 渲染，支持表格、代码块、Mermaid 图表、HTML 标签
+- 笔记系统：每篇预测可附带多条实时笔记（时间轴 UI，倒序展示）
+- 新内容更新提示（精确到具体哪些 symbol 有更新）+ 浏览器通知
+- 移动端优先的响应式设计，兼容微信/Telegram/钉钉/QQ WebView
 - 暗黑科技感主题
-- Service Worker 离线缓存
+- Service Worker 离线缓存（HTML Network First + 静态资源 Cache First）
+- 数据从 GitHub Pages 自身 CDN 加载，低延迟
 - SEO 基础 Meta 信息
 
 ### 1.3 目标用户
@@ -50,46 +52,52 @@ ich-trading/
 │   │   ├── LatestPosts.vue       # 首页顶部"最新预测"区域
 │   │   ├── SymbolGrid.vue        # 首页 symbol 卡片网格
 │   │   ├── PostCard.vue          # 预测卡片组件
+│   │   ├── NoteList.vue          # 笔记列表组件（时间轴 UI）
 │   │   ├── UpdateNotifier.vue    # 更新提示条组件
 │   │   ├── MarkdownRenderer.vue  # Markdown 渲染组件
 │   │   ├── TagFilter.vue         # 标签筛选组件
-│   │   ├── NavBar.vue            # 顶部导航栏
-│   │   └── ThemeToggle.vue       # 主题切换（预留，暂不实现）
+│   │   └── NavBar.vue            # 顶部导航栏
 │   ├── composables/
-│   │   ├── useGitHub.js          # GitHub 数据加载逻辑
+│   │   ├── useGitHub.js          # 数据加载逻辑（生产环境从 GitHub Pages CDN 加载）
 │   │   ├── useUpdateChecker.js   # 更新检测逻辑
-│   │   └── useTheme.js           # 主题管理（预留）
+│   │   └── useNotification.js    # 浏览器通知封装
 │   ├── utils/
 │   │   ├── markdown.js           # markdown-it 配置与初始化
 │   │   └── frontmatter.js        # frontmatter 解析工具
 │   ├── styles/
+│   │   ├── main.css              # 全局样式
 │   │   └── markdown-theme.css    # Markdown 渲染的暗黑主题样式
 │   └── assets/
 ├── public/
 │   ├── favicon.ico               # 用户自行提供
 │   └── sw.js                     # Service Worker
 ├── predictions/                  # 预测文件目录（核心内容）
-│   ├── BTC/
-│   │   ├── meta.json             # symbol 元信息
-│   │   ├── 2026-02-16.md
-│   │   └── 2026-02-10.md
-│   ├── ETH/
+│   ├── TEMPLATE/                 # 模板目录
+│   │   └── 2026-01-01/
+│   │       ├── post.md
+│   │       └── notes/
+│   ├── ETH-USDT/
 │   │   ├── meta.json
-│   │   └── 2026-02-15.md
-│   ├── AAPL/
+│   │   └── 2026-02-16周/
+│   │       ├── post.md
+│   │       └── notes/
+│   ├── 01810.HK/
 │   │   ├── meta.json
-│   │   └── 2026-02-14.md
+│   │   └── 丙午年春节2.5个交易日/
+│   │       ├── post.md
+│   │       └── notes/
 │   └── ...
 ├── scripts/
 │   └── generate-index.js         # 生成 index.json 的 Node.js 脚本
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml            # GitHub Actions 工作流
+│       └── deploy.yml            # GitHub Actions 工作流（构建后复制数据到 dist/）
 ├── index.json                    # 自动生成的索引文件（根目录，勿手动编辑）
 ├── package.json
 ├── vite.config.js
 ├── tailwind.config.js
 ├── postcss.config.js
+├── LICENSE                       # MIT 开源协议
 └── README.md
 ```
 
@@ -103,19 +111,27 @@ ich-trading/
 {
   "lastUpdated": "2026-02-16T10:00:00Z",
   "symbols": {
-    "BTC": {
-      "name": "Bitcoin",
-      "description": "比特币易经预测",
-      "icon": "₿",
+    "01810.HK": {
+      "name": "小米集团-W",
+      "description": "小米集团易经预测",
+      "icon": "📱",
       "posts": [
         {
-          "date": "2026-02-16",
-          "title": "比特币周易预测",
-          "subtitle": "乾卦九五，飞龙在天",
-          "summary": "本周比特币走势强劲，卦象显示上行动力充足...",
+          "date": "2026-02-14",
+          "folder": "丙午年春节2.5个交易日",
+          "title": "颐->谦！春节红包行情的小米集团",
+          "subtitle": "收→压→爆",
+          "summary": "预计波动有，但不至于单边暴走。",
           "format": "md",
-          "path": "predictions/BTC/2026-02-16.md",
-          "tags": ["看涨", "乾卦"]
+          "path": "predictions/01810.HK/丙午年春节2.5个交易日/post.md",
+          "tags": ["颐卦", "谦卦"],
+          "notes": [
+            {
+              "time": "2026-02-16T12:00",
+              "title": "除夕实盘校准与节后剧本推演",
+              "path": "predictions/01810.HK/丙午年春节2.5个交易日/notes/2026-02-16T12-00.md"
+            }
+          ]
         }
       ]
     }
@@ -132,13 +148,15 @@ ich-trading/
 | `symbols[x].name` | `meta.json` 的 `name` | symbol 全称 |
 | `symbols[x].description` | `meta.json` 的 `description` | symbol 描述 |
 | `symbols[x].icon` | `meta.json` 的 `icon` | 展示用 emoji/符号 |
-| `posts[].date` | 文件名推断（`2026-02-16.md` → `2026-02-16`） | 预测日期 |
+| `posts[].date` | frontmatter `date` 字段，回退用目录名 | 用于排序 |
+| `posts[].folder` | 目录名 | 用于路由和前端显示 |
 | `posts[].title` | frontmatter `title` | 正标题 |
 | `posts[].subtitle` | frontmatter `subtitle` | 副标题（可选） |
 | `posts[].summary` | frontmatter `summary` | 简介摘要（可选） |
 | `posts[].format` | 文件扩展名 | 固定为 `"md"` |
-| `posts[].path` | 相对仓库根目录路径 | 用于拼接 raw 链接 |
+| `posts[].path` | 相对仓库根目录路径 | 用于拼接加载 URL |
 | `posts[].tags` | frontmatter `tags` | 标签数组（可选） |
+| `posts[].notes` | 扫描 notes/ 子目录 | 笔记数组，按时间正序 |
 
 ### 3.2 meta.json（每个 symbol 目录下，手动维护）
 
@@ -160,10 +178,11 @@ ich-trading/
 
 ```markdown
 ---
-title: "比特币周易预测"
-subtitle: "乾卦九五，飞龙在天"
-summary: "本周比特币走势强劲，卦象显示上行动力充足，但需注意变爻警示。"
-tags: ["看涨", "乾卦", "变爻"]
+date: "2026-02-14"
+title: "颐->谦！春节红包行情的小米集团"
+subtitle: "收→压→爆"
+summary: "预计波动有，但不至于单边暴走。"
+tags: ["颐卦", "谦卦"]
 ---
 
 ## 卦象分析
@@ -173,12 +192,13 @@ tags: ["看涨", "乾卦", "变爻"]
 
 | 字段 | 必填 | 类型 | 说明 |
 |------|------|------|------|
+| `date` | 是 | string | 预测日期（YYYY-MM-DD），用于排序 |
 | `title` | 是 | string | 正标题 |
 | `subtitle` | 否 | string | 副标题，通常为卦象名 |
 | `summary` | 否 | string | 摘要，用于列表页卡片展示 |
 | `tags` | 否 | string[] | 标签数组，用于筛选 |
 
-`date` 和 `symbol` 从目录结构和文件名自动推断，**不需要**在 frontmatter 中声明。
+`symbol` 从目录结构自动推断。目录名（folder）作为显示标签和路由参数，`date` 仅用于排序。
 
 ### 3.4 笔记（Notes）功能
 
@@ -232,10 +252,13 @@ title: "盘中追踪：突破关键阻力位"
 
 #### 前端展示
 
-在 PostView 详情页底部，预测正文下方展示笔记列表：
+在 PostView 详情页底部，预测正文下方展示笔记列表（NoteList 组件）：
+- 时间轴 UI（金色竖线 + 节点）
+- 倒序展示（最新在上），最新笔记标记蓝色 glow 节点 + "最新" badge
 - 每条笔记显示时间、标题和 Markdown 渲染内容
-- 按时间正序排列（最早在上）
-- 笔记区域有分隔线和「笔记」标题
+- 移动端笔记头部两行布局（时间在上、标题在下）
+- 点击帖子标题可快速跳转到最新笔记
+- 笔记区域有分隔线和「📝 笔记」标题
 
 ---
 
@@ -264,20 +287,21 @@ title: "盘中追踪：突破关键阻力位"
 
 ### 4.3 数据加载策略
 
-**核心原则：全部通过 `raw.githubusercontent.com` 拉取，不依赖 GitHub REST API，无速率限制。**
+**核心原则：生产环境从 GitHub Pages 自身 CDN 加载数据，低延迟。CI 构建后自动将 `index.json` 和 `predictions/` 复制到 `dist/` 一同部署。**
 
 ```
-Base URL: https://raw.githubusercontent.com/KodaTao/ich-trading/main/
+开发环境：直接从 Vite dev server 加载
+生产环境：从 GitHub Pages 自身加载（如 https://kodatao.github.io/ich-trading/index.json）
 ```
 
 加载流程：
 
-1. **应用启动**：fetch `{baseURL}/index.json`（带时间戳参数绕过 CDN 缓存），获取全部索引，缓存到 Vue reactive state
+1. **应用启动**：fetch `{BASE_URL}/index.json`，获取全部索引，缓存到 Vue reactive state
 2. **进入 symbol 页面**：索引中已有 posts 列表，无需额外请求
-3. **进入预测详情页**：根据 `posts[].path` 拼接 raw URL，fetch `.md` 文件内容，前端解析并渲染
+3. **进入预测详情页**：根据 `posts[].path` 拼接 URL，fetch `.md` 文件内容，前端解析并渲染
 4. **meta.json 数据**：在生成 `index.json` 时已被脚本合并，前端无需单独请求
 
-`raw.githubusercontent.com` 有约 5 分钟的 CDN 缓存，新 push 的内容可能有短暂延迟。对于 `index.json`，通过追加 `?t={timestamp}` 参数绕过缓存；对于 markdown 文件（发布后不再修改），利用 CDN 缓存提升加载速度。
+数据走 GitHub Pages 的 Fastly CDN，国内访问速度优于 `raw.githubusercontent.com`。Service Worker 对 index.json 和 markdown 使用 Network First 策略，确保内容更新及时。
 
 ### 4.4 Markdown 渲染方案
 
@@ -288,7 +312,7 @@ import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 
 const md = new MarkdownIt({
-  html: false,        // 禁用原生 HTML（安全考虑）
+  html: true,         // 启用原生 HTML（支持 <details> 等标签）
   linkify: true,      // 自动识别链接
   typographer: true,  // 智能标点
   highlight: function (str, lang) {
@@ -572,7 +596,7 @@ module.exports = {
 
 ### 8.1 触发策略
 
-只有前端源码变更时才触发构建部署。仅预测内容变更时不触发（前端从 main 分支 raw 链接动态加载）。
+前端源码变更、`index.json` 变更、`predictions/` 内容变更均触发构建部署。构建后自动将数据文件复制到 `dist/` 一同部署到 GitHub Pages。
 
 ### 8.2 deploy.yml
 
@@ -586,6 +610,8 @@ on:
       - 'src/**'
       - 'public/**'
       - 'index.html'
+      - 'index.json'
+      - 'predictions/**'
       - 'vite.config.js'
       - 'tailwind.config.js'
       - 'postcss.config.js'
@@ -605,6 +631,10 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
+      - name: Copy data to dist
+        run: |
+          cp index.json dist/
+          cp -r predictions dist/
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -643,9 +673,10 @@ export default defineConfig({
 ### 10.1 缓存策略
 
 ```
-Cache Name: ich-trading-v1
+Cache Name: ich-trading-v2
 
-static-assets  → Cache First    → HTML、JS、CSS、字体
+static-assets  → HTML: Network First（确保部署后加载最新版本）
+                 JS/CSS/字体: Cache First（文件名含 hash，内容不变）
 api-cache      → Network First  → index.json
 content-cache  → Network First  → markdown 文件
 ```
@@ -661,18 +692,17 @@ content-cache  → Network First  → markdown 文件
 
 ## 十一、关键实现细节汇总
 
-### 11.1 Raw URL 拼接
+### 11.1 数据 URL 拼接
 
 ```javascript
-const REPO_OWNER = 'KodaTao'
-const REPO_NAME = 'ich-trading'
-const BRANCH = 'main'
-const RAW_BASE = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}`
+// 生产环境从 GitHub Pages 自身加载
+const RAW_BASE = import.meta.env.BASE_URL.replace(/\/$/, '')
+// 结果：/ich-trading
 
-// 索引（绕过 CDN 缓存）
-const indexURL = `${RAW_BASE}/index.json?t=${Date.now()}`
+// 索引
+const indexURL = `${RAW_BASE}/index.json`
 
-// 预测文件（利用 CDN 缓存）
+// 预测文件
 const postURL = `${RAW_BASE}/${post.path}`
 ```
 

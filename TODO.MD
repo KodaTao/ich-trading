@@ -91,3 +91,25 @@
 - [x] 14.1 移动端适配检查（表格/代码块横滚触摸优化、标签/按钮触摸区域增大、移动端字体缩放） ✅
 - [x] 14.2 页面过渡动画调优（已有 fadeInUp staggered 动画 + 页面 fade-slide 过渡，新增 prefers-reduced-motion 支持） ✅
 - [x] 14.3 性能检查（动画仅用 transform/opacity、消除移动端点击高亮、prefers-reduced-motion 全局支持） ✅
+
+## 阶段十五：笔记列表 UX 优化
+
+- [x] 15.1 笔记列表倒序显示（最新在前），最新笔记标记蓝色 glow 节点 + "最新" badge ✅
+- [x] 15.2 点击帖子标题跳转最新笔记（有笔记时）或回到顶部（无笔记时） ✅
+- [x] 15.3 移动端笔记头部改为两行布局（时间在上、标题在下） ✅
+- [x] 15.4 修复 scrollToLatest 滚动到笔记中间的 bug（block: center → start） ✅
+
+## 阶段十六：兼容性与 Bug 修复
+
+- [x] 16.1 修复 WebView 黑屏问题（useNotification.js 模块级 Notification 访问崩溃 + Google Fonts 异步加载） ✅
+- [x] 16.2 修复页面刷新只显示标题不显示内容的 bug（loading 初始状态 + watch currentPost） ✅
+- [x] 16.3 修复空 symbol 目录误触发更新通知（latestDate 存在性检查） ✅
+- [x] 16.4 启用 markdown-it 的 HTML 标签支持（html: true） ✅
+
+## 阶段十七：数据加载与部署优化
+
+- [x] 17.1 Service Worker 缓存策略优化：HTML 改为 Network First，确保部署后用户刷新即加载最新版本 ✅
+- [x] 17.2 缓存版本升级 v1 → v2，清理旧缓存 ✅
+- [x] 17.3 数据加载迁移：生产环境从 GitHub Pages 自身加载 index.json 和 predictions/，替代 raw.githubusercontent.com ✅
+- [x] 17.4 部署流程优化：CI 构建后自动复制 index.json + predictions/ 到 dist/，index.json 和 predictions/ 变更也触发部署 ✅
+- [x] 17.5 帖子排序优化：post.md frontmatter 新增 date 字段用于排序，目录名（folder）用于显示和路由 ✅

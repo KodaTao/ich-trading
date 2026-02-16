@@ -16,11 +16,12 @@ const posts = computed(() => getLatestPosts(5))
     <div class="flex flex-col gap-3">
       <PostCard
         v-for="(post, index) in posts"
-        :key="`${post.symbolCode}-${post.date}`"
+        :key="`${post.symbolCode}-${post.folder}`"
         :symbol-code="post.symbolCode"
         :symbol-name="post.symbolName"
         :symbol-icon="post.symbolIcon"
         :date="post.date"
+        :folder="post.folder"
         :title="post.title"
         :subtitle="post.subtitle"
         :summary="post.summary"
