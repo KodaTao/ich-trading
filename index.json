@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-16T06:56:39.821Z",
+  "lastUpdated": "2026-02-16T07:03:23.370Z",
   "symbols": {
     "01810.HK": {
       "name": "小米集团-W",
@@ -7,17 +7,23 @@
       "icon": "📱",
       "posts": [
         {
-          "date": "post",
+          "date": "春节2.5个交易日",
           "title": "颐->谦！春节红包行情的小米集团",
           "subtitle": "收→压→爆",
           "summary": "但三个动爻中有两个\"自废武功\"（兄弟化回头克、父母旬空动），实际落地的有效能量打折扣，预计波动有，但不至于单边暴走。",
           "format": "md",
-          "path": "predictions/01810.HK/post.md",
+          "path": "predictions/01810.HK/春节2.5个交易日/post.md",
           "tags": [
             "颐卦",
             "谦卦"
           ],
-          "notes": []
+          "notes": [
+            {
+              "time": "2026-02-16T12:00",
+              "title": "除夕实盘校准与节后剧本推演",
+              "path": "predictions/01810.HK/春节2.5个交易日/notes/2026-02-16T12-00.md"
+            }
+          ]
         }
       ]
     },
