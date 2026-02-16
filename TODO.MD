@@ -135,3 +135,9 @@
 - [x] 20.1 新建 FullscreenViewer.vue：浏览器 Fullscreen API，顶部标题栏 + 关闭按钮，max-w-6xl 宽屏阅读 ✅
 - [x] 20.2 PostView 正文全屏按钮（⛶ 全屏阅读） ✅
 - [x] 20.3 NoteList 每条笔记全屏按钮，emit 事件由 PostView 处理 ✅
+
+## 阶段二十一：Giscus 评论系统
+
+- [x] 21.1 安装 @giscus/vue，新建 GiscusComments.vue 评论组件（mapping=specific，dark_dimmed 主题） ✅
+- [x] 21.2 PostView 正文底部集成帖子评论区，term 格式：`symbolCode/dateParam` ✅
+- [x] 21.3 NoteList 每条笔记底部集成独立评论区，term 格式：`symbolCode/dateParam/note/time` ✅
