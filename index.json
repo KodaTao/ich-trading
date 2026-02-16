@@ -1,0 +1,121 @@
+{
+  "lastUpdated": "2026-02-16T07:55:25.581Z",
+  "symbols": {
+    "01810.HK": {
+      "name": "小米集团-W",
+      "description": "小米集团易经预测",
+      "icon": "📱",
+      "posts": [
+        {
+          "date": "2026-02-14",
+          "folder": "丙午年春节2.5个交易日",
+          "title": "颐->谦！春节红包行情的小米集团",
+          "subtitle": "收→压→爆",
+          "summary": "但三个动爻中有两个\"自废武功\"（兄弟化回头克、父母旬空动），实际落地的有效能量打折扣，预计波动有，但不至于单边暴走。",
+          "format": "md",
+          "path": "predictions/01810.HK/丙午年春节2.5个交易日/post.md",
+          "tags": [
+            "颐卦",
+            "谦卦"
+          ],
+          "notes": [
+            {
+              "time": "2026-02-16T12:00",
+              "title": "除夕实盘校准与节后剧本推演",
+              "path": "predictions/01810.HK/丙午年春节2.5个交易日/notes/2026-02-16T12-00.md"
+            }
+          ]
+        }
+      ]
+    },
+    "03690.HK": {
+      "name": "美团-W",
+      "description": "美团易经预测",
+      "icon": "🛵",
+      "posts": []
+    },
+    "ETH-USDT": {
+      "name": "Ethereum",
+      "description": "以太坊/USDT 易经预测",
+      "icon": "⟠",
+      "posts": [
+        {
+          "date": "2026-02-16",
+          "folder": "2026-02-16周",
+          "title": "姤->火！春节红包行情的ETH",
+          "subtitle": "风云际会，火中取栗",
+          "summary": "本周绝非“垃圾时间”。日冲月建，加上三爻乱动，市场将出现宽幅震荡（插针行情）。多空双杀的概率极大。",
+          "format": "md",
+          "path": "predictions/ETH-USDT/2026-02-16周/post.md",
+          "tags": [
+            "插针",
+            "宽幅震荡",
+            "姤卦",
+            "离卦"
+          ],
+          "notes": [
+            {
+              "time": "2026-02-16T14:15",
+              "title": "除夕夜·寒铁压顶，伏财待春",
+              "path": "predictions/ETH-USDT/2026-02-16周/notes/2026-02-16T14-15.md"
+            }
+          ]
+        }
+      ]
+    },
+    "HSTECH": {
+      "name": "恒生科技指数",
+      "description": "恒生科技指数易经预测",
+      "icon": "📡",
+      "posts": [
+        {
+          "date": "2026-02-14",
+          "folder": "丙午年春节2.5个交易日",
+          "title": "泰->丰！春节红包行情的恒生科技",
+          "subtitle": "财爻处于被围攻状态，整体偏空",
+          "summary": "原有的平衡格局正在向过度膨胀方向演变，能量达到峰值后需警惕反转",
+          "format": "md",
+          "path": "predictions/HSTECH/丙午年春节2.5个交易日/post.md",
+          "tags": [
+            "泰卦",
+            "丰卦"
+          ],
+          "notes": [
+            {
+              "time": "2026-02-16T12:00",
+              "title": "地天泰·实盘校准——除夕半日\"深V锤头\"重写剧本",
+              "path": "predictions/HSTECH/丙午年春节2.5个交易日/notes/2026-02-16T12-00.md"
+            }
+          ]
+        }
+      ]
+    },
+    "TEMPLATE": {
+      "name": "模板",
+      "description": "预测模板示例，可参考此格式创建新的预测",
+      "icon": "📋",
+      "posts": [
+        {
+          "date": "2026-01-01",
+          "folder": "2026-01-01",
+          "title": "预测标题",
+          "subtitle": "卦象名称，爻辞摘要",
+          "summary": "一句话概括本次预测的核心观点。",
+          "format": "md",
+          "path": "predictions/TEMPLATE/2026-01-01/post.md",
+          "tags": [
+            "标签1",
+            "标签2"
+          ],
+          "notes": [
+            {
+              "time": "2026-01-01T12:00",
+              "title": "笔记标题示例",
+              "path": "predictions/TEMPLATE/2026-01-01/notes/2026-01-01T12-00.md"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
