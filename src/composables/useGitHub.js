@@ -36,8 +36,8 @@ async function loadIndex() {
   state.error = null
 
   try {
-    const url = `${RAW_BASE}/index.json`
-    const res = await fetch(url)
+    const url = `${RAW_BASE}/index.json?t=${Date.now()}`
+    const res = await fetch(url, { cache: 'no-cache' })
     if (!res.ok) throw new Error(`加载索引失败: ${res.status}`)
     state.index = await res.json()
     initialized.value = true
