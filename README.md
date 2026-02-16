@@ -1,6 +1,8 @@
 <div align="center">
 
-# ☰ ICH Trading
+<img src="public/favicon.png" alt="ICH Trading Logo" width="80" />
+
+# ICH Trading
 
 **易经交易预测平台**
 
