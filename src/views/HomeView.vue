@@ -23,6 +23,29 @@ const { state } = useGitHub()
     <template v-else>
       <SymbolGrid />
       <LatestPosts />
+
+      <!-- 社区链接 -->
+      <div class="mt-10 pt-6 border-t border-border-subtle text-center">
+        <p class="text-text-secondary text-sm mb-3">欢迎加入 Telegram 频道，获取最新预测推送</p>
+        <div class="flex items-center justify-center gap-4">
+          <a
+            href="https://t.me/IChingTrading"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-accent-blue/10 text-accent-blue hover:bg-accent-blue/20 transition-colors"
+          >
+            📢 ICH Trading 频道
+          </a>
+          <a
+            href="https://t.me/kodatao"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-accent-gold/10 text-accent-gold hover:bg-accent-gold/20 transition-colors"
+          >
+            💬 联系作者
+          </a>
+        </div>
+      </div>
     </template>
   </div>
 </template>

@@ -160,6 +160,15 @@ ich-trading/
 
 ---
 
+## 社区
+
+欢迎加入我们的 Telegram 频道，获取最新预测推送和交流讨论：
+
+- 📢 **频道**：[ICH Trading](https://t.me/IChingTrading)
+- 💬 **作者**：[@kodatao](https://t.me/kodatao)
+
+---
+
 ## 许可证
 
 本项目基于 [MIT License](LICENSE) 开源。
