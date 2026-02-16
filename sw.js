@@ -1,7 +1,7 @@
-const CACHE_VERSION = 'ich-trading-v1'
-const STATIC_CACHE = 'static-assets-v1'
-const API_CACHE = 'api-cache-v1'
-const CONTENT_CACHE = 'content-cache-v1'
+const CACHE_VERSION = 'ich-trading-v2'
+const STATIC_CACHE = 'static-assets-v2'
+const API_CACHE = 'api-cache-v2'
+const CONTENT_CACHE = 'content-cache-v2'
 
 // 安装：预缓存关键静态资源
 self.addEventListener('install', (event) => {
@@ -39,13 +39,18 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  // 静态资源 → Cache First
+  // HTML 页面 → Network First（确保始终加载最新版本）
+  if (url.origin === self.location.origin && request.destination === 'document') {
+    event.respondWith(networkFirst(request, STATIC_CACHE))
+    return
+  }
+
+  // 带 hash 的静态资源（JS/CSS/字体）→ Cache First（文件名含 hash，内容不变）
   if (
     url.origin === self.location.origin &&
     (request.destination === 'script' ||
       request.destination === 'style' ||
-      request.destination === 'font' ||
-      request.destination === 'document')
+      request.destination === 'font')
   ) {
     event.respondWith(cacheFirst(request, STATIC_CACHE))
     return
