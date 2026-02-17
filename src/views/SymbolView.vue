@@ -5,6 +5,7 @@ import { useGitHub } from '../composables/useGitHub.js'
 import { useUpdateChecker } from '../composables/useUpdateChecker.js'
 import PostCard from '../components/PostCard.vue'
 import TagFilter from '../components/TagFilter.vue'
+import AccuracyBadge from '../components/AccuracyBadge.vue'
 
 const route = useRoute()
 const { getSymbol, state } = useGitHub()
@@ -25,6 +26,15 @@ const allTags = computed(() => {
     }
   }
   return [...tagSet]
+})
+
+// 平均准确率
+const avgAccuracy = computed(() => {
+  if (!symbol.value?.posts) return null
+  const reviewed = symbol.value.posts.filter(p => p.review)
+  if (reviewed.length === 0) return null
+  const sum = reviewed.reduce((acc, p) => acc + p.review.accuracy, 0)
+  return { avg: Math.round(sum / reviewed.length), count: reviewed.length }
 })
 
 // 按标签筛选（并集）
@@ -64,9 +74,16 @@ if (symbol.value?.posts?.[0]?.date) {
         <p v-if="symbol.description" class="text-text-secondary text-sm mt-1">
           {{ symbol.description }}
         </p>
-        <p class="text-text-secondary text-xs mt-2">
-          共 {{ symbol.posts?.length || 0 }} 篇预测
-        </p>
+        <div class="flex items-center gap-3 mt-2">
+          <p class="text-text-secondary text-xs">
+            共 {{ symbol.posts?.length || 0 }} 篇预测
+          </p>
+          <div v-if="avgAccuracy" class="flex items-center gap-1.5">
+            <span class="text-text-secondary text-xs">平均准确率</span>
+            <AccuracyBadge :accuracy="avgAccuracy.avg" />
+            <span class="text-text-secondary text-xs">({{ avgAccuracy.count }} 篇复盘)</span>
+          </div>
+        </div>
       </div>
 
       <!-- 标签筛选 -->
@@ -86,6 +103,7 @@ if (symbol.value?.posts?.[0]?.date) {
           :subtitle="post.subtitle"
           :summary="post.summary"
           :tags="post.tags"
+          :review="post.review"
           :show-symbol="false"
           :style="{ animationDelay: `${index * 60}ms` }"
           class="animate-fade-in"

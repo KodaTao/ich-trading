@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted, watch } from 'vue'
 import NavBar from './components/NavBar.vue'
 import UpdateNotifier from './components/UpdateNotifier.vue'
+import InstallPrompt from './components/InstallPrompt.vue'
 import { useGitHub } from './composables/useGitHub.js'
 import { useUpdateChecker } from './composables/useUpdateChecker.js'
 import { useNotification } from './composables/useNotification.js'
@@ -50,9 +51,10 @@ watch(
     <main class="pt-14">
       <router-view v-slot="{ Component }">
         <transition name="fade-slide" mode="out-in">
-          <component :is="Component" />
+          <component :is="Component" :key="$route.path" />
         </transition>
       </router-view>
     </main>
+    <InstallPrompt />
   </div>
 </template>

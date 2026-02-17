@@ -62,14 +62,14 @@
 
 - [x] 10.1 创建示例 predictions 目录（BTC、ETH 各含 meta.json 和至少 2 篇示例 .md 文件）
 - [x] 10.2 运行 `generate-index` 生成 index.json，验证输出格式 ✅
-- [ ] 10.3 本地 `npm run dev` 完整流程测试（首页、列表页、详情页、标签筛选、更新提示） ⏳ 等待用户测试
+- [x] 10.3 本地 `npm run dev` 完整流程测试（首页、列表页、详情页、标签筛选、更新提示） ✅
 - [x] 10.4 `npm run build` 构建验证 ✅
 
 ## 阶段十一：部署配置
 
 - [x] 11.1 编写 `.github/workflows/deploy.yml` — GitHub Actions 自动部署（仅前端源码变更时触发）
-- [ ] 11.2 配置 GitHub Pages（gh-pages 分支） ⏳ 需要 push 后配置
-- [ ] 11.3 线上验证部署结果 ⏳ 需要部署后验证
+- [x] 11.2 配置 GitHub Pages（gh-pages 分支） ✅
+- [x] 11.3 线上验证部署结果 ✅
 
 ## 阶段十二：浏览器通知（Browser Notification）
 
@@ -141,3 +141,56 @@
 - [x] 21.1 安装 @giscus/vue，新建 GiscusComments.vue 评论组件（mapping=specific，dark_dimmed 主题） ✅
 - [x] 21.2 PostView 正文底部集成帖子评论区，term 格式：`symbolCode/dateParam` ✅
 - [x] 21.3 NoteList 每条笔记底部集成独立评论区，term 格式：`symbolCode/dateParam/note/time` ✅
+
+## 阶段二十二：搜索功能
+
+- [x] 22.1 新建 `components/SearchBar.vue` — 导航栏搜索入口 + 搜索结果下拉面板（合并为一个组件） ✅
+- [x] 22.2 修改 `NavBar.vue` — 集成 SearchBar 组件 ✅
+- [x] 22.3 搜索逻辑：前端内存中对 index.json 数据进行模糊匹配，高亮关键词，支持键盘导航 ✅
+
+## 阶段二十三：RSS Feed 生成
+
+- [x] 23.1 修改 `scripts/generate-index.js` — 同时生成 `feed.xml`（Atom 格式，包含最新 20 条预测） ✅
+- [x] 23.2 修改 `index.html` — 添加 RSS 自动发现 `<link>` 标签 ✅
+- [x] 23.3 修改 `.github/workflows/deploy.yml` — 构建后复制 `feed.xml` 到 dist/ ✅
+- [x] 23.4 首页底部添加 RSS 订阅链接 ✅
+
+## 阶段二十四：预测准确率追踪与复盘
+
+- [x] 24.1 设计复盘报告格式 — `review.md`，frontmatter 含 `type: review`、`accuracy`、`verdict` ✅
+- [x] 24.2 修改 `generate-index.js` — 识别 review.md，解析 accuracy/verdict 字段写入 index.json ✅
+- [x] 24.3 新建 `components/AccuracyBadge.vue` — 准确率标签（颜色分级：绿/黄/红） ✅
+- [x] 24.4 修改 `PostCard.vue` — 已有复盘的帖子显示准确率 badge ✅
+- [x] 24.5 修改 `SymbolView.vue` — symbol 信息区展示该 symbol 历史平均准确率统计 ✅
+- [x] 24.6 `PostView.vue` 帖子详情页底部展示复盘报告（准确率 + 点评 + 正文渲染） ✅
+
+## 阶段二十五：亮色主题切换
+
+- [x] 25.1 新建 `composables/useTheme.js` — 主题状态管理（dark/light），localStorage 持久化，支持跟随系统 ✅
+- [x] 25.2 新建 `components/ThemeToggle.vue` — 导航栏主题切换按钮（月亮/太阳图标） ✅
+- [x] 25.3 改造 Tailwind 颜色为 CSS 变量体系（RGB 格式，支持 Tailwind 透明度语法） ✅
+- [x] 25.4 在 `styles/main.css` 中定义暗色/亮色两套 CSS 变量 ✅
+- [x] 25.5 修改 `styles/markdown-theme.css` — Markdown 渲染适配双主题（CSS 变量） ✅
+- [x] 25.6 修改 `GiscusComments.vue` — 根据当前主题动态切换 Giscus iframe 主题（dark_dimmed / light） ✅
+- [x] 25.7 `index.html` 内联脚本防止主题闪烁 ✅
+
+## 阶段二十六：图片支持与优化
+
+- [x] 26.1 确定图片存储方案 — 图片放在帖子目录下 `images/` 子目录 ✅
+- [x] 26.2 `generate-index.js` 已自动忽略无 post.md 的目录（images 目录不受影响） ✅
+- [x] 26.3 修改 `utils/markdown.js` — 图片相对路径自动拼接为完整 URL（basePath 参数） ✅
+- [x] 26.4 新建 `components/ImageViewer.vue` — 图片点击放大查看（lightbox，ESC 关闭） ✅
+- [x] 26.5 修改 `MarkdownRenderer.vue` — 集成 ImageViewer，事件委托处理图片点击 ✅
+- [x] 26.6 修改 `styles/markdown-theme.css` — 图片响应式样式 + cursor: pointer ✅
+
+## 阶段二十七：PWA 安装支持
+
+- [x] 27.1 新建 `public/manifest.json` — PWA 清单（名称、图标、主题色、启动 URL） ✅
+- [x] 27.2 修改 `index.html` — 引入 manifest + apple-touch-icon + theme-color meta ✅
+- [x] 27.3 新建 `components/InstallPrompt.vue` — 安装引导提示（底部弹出，可关闭，不重复提示） ✅
+- [x] 27.4 修改 `App.vue` — 集成 InstallPrompt 组件 ✅
+
+## 阶段二十八：阅读进度指示器
+
+- [x] 28.1 新建 `components/ReadingProgress.vue` — 顶部阅读进度条（scroll 事件驱动，固定顶部，主题色渐变） ✅
+- [x] 28.2 修改 `PostView.vue` — 仅在详情页显示进度条 ✅

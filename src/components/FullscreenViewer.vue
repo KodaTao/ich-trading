@@ -100,7 +100,8 @@ onBeforeUnmount(() => {
 
 .fullscreen-viewer:fullscreen {
   display: block;
-  background: var(--bg-primary, #0a0a1a);
+  background: rgb(var(--bg-primary));
+  color: rgb(var(--text-primary));
   overflow-y: auto;
   height: 100vh;
 }

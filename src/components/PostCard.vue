@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import AccuracyBadge from './AccuracyBadge.vue'
 
 const props = defineProps({
   symbolCode: String,
@@ -13,6 +14,10 @@ const props = defineProps({
   tags: {
     type: Array,
     default: () => [],
+  },
+  review: {
+    type: Object,
+    default: null,
   },
   showSymbol: {
     type: Boolean,
@@ -43,9 +48,12 @@ function navigateToPost() {
     </div>
 
     <!-- 标题 -->
-    <h3 class="text-text-primary font-medium text-base mb-1 group-hover:text-accent-blue transition-colors">
-      {{ title }}
-    </h3>
+    <div class="flex items-start gap-2 mb-1">
+      <h3 class="text-text-primary font-medium text-base group-hover:text-accent-blue transition-colors flex-1">
+        {{ title }}
+      </h3>
+      <AccuracyBadge v-if="review" :accuracy="review.accuracy" class="shrink-0 mt-0.5" />
+    </div>
 
     <!-- 副标题 -->
     <p v-if="subtitle" class="text-accent-gold text-sm mb-2">

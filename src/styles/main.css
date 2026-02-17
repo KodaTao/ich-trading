@@ -2,28 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== 主题变量：暗色（默认） ===== */
+:root,
+[data-theme="dark"] {
+  --bg-primary: 10 10 15;
+  --bg-secondary: 18 18 26;
+  --bg-card: rgba(255, 255, 255, 0.03);
+  --accent-blue: 0 212 255;
+  --accent-gold: 201 168 76;
+  --text-primary: 224 224 224;
+  --text-secondary: 136 136 136;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+
+  --scrollbar-track: #0a0a0f;
+  --scrollbar-thumb: #333;
+  --scrollbar-thumb-hover: #555;
+}
+
+/* ===== 主题变量：亮色 ===== */
+[data-theme="light"] {
+  --bg-primary: 248 249 250;
+  --bg-secondary: 255 255 255;
+  --bg-card: rgba(0, 0, 0, 0.02);
+  --accent-blue: 0 153 204;
+  --accent-gold: 184 148 31;
+  --text-primary: 26 26 46;
+  --text-secondary: 102 102 102;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+
+  --scrollbar-track: #f0f0f0;
+  --scrollbar-thumb: #ccc;
+  --scrollbar-thumb-hover: #aaa;
+}
+
 /* 移动端点击高亮消除 */
 * {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 全局滚动条暗黑主题 */
+/* 全局滚动条 */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0f;
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--scrollbar-thumb-hover);
 }
 
 /* 全局过渡 */
@@ -66,4 +99,9 @@
   .slide-down-leave-active {
     transition-duration: 0.01ms !important;
   }
+}
+
+/* 主题切换过渡 */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

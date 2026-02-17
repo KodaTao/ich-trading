@@ -27,7 +27,7 @@ const { state } = useGitHub()
       <!-- 社区链接 -->
       <div class="mt-10 pt-6 border-t border-border-subtle text-center">
         <p class="text-text-secondary text-sm mb-3">欢迎加入 Telegram 频道，获取最新预测推送</p>
-        <div class="flex items-center justify-center gap-4">
+        <div class="flex items-center justify-center gap-3 flex-wrap">
           <a
             href="https://t.me/IChingTrading"
             target="_blank"
@@ -44,6 +44,20 @@ const { state } = useGitHub()
           >
             💬 联系作者
           </a>
+          <a
+            href="/ich-trading/feed.xml"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-orange-500/10 text-orange-400 hover:bg-orange-500/20 transition-colors"
+          >
+            📡 RSS 订阅
+          </a>
+          <router-link
+            to="/support"
+            class="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
+          >
+            ☕ 支持作者
+          </router-link>
         </div>
       </div>
     </template>

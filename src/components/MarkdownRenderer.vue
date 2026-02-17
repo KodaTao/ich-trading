@@ -1,6 +1,7 @@
 <script setup>
-import { ref, watch, nextTick, onUnmounted } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { renderMarkdown } from '../utils/markdown.js'
+import ImageViewer from './ImageViewer.vue'
 import 'highlight.js/styles/atom-one-dark.css'
 import '../styles/markdown-theme.css'
 
@@ -9,10 +10,22 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  basePath: {
+    type: String,
+    default: '',
+  },
 })
 
 const htmlContent = ref('')
 const containerRef = ref(null)
+const imageViewerRef = ref(null)
+
+function handleContainerClick(e) {
+  const img = e.target.closest('img')
+  if (img && containerRef.value?.contains(img)) {
+    imageViewerRef.value?.open(img.src, img.alt)
+  }
+}
 
 async function renderMermaid() {
   if (!containerRef.value) return
@@ -46,7 +59,7 @@ watch(
       htmlContent.value = ''
       return
     }
-    htmlContent.value = renderMarkdown(newContent)
+    htmlContent.value = renderMarkdown(newContent, props.basePath)
     await nextTick()
     renderMermaid()
   },
@@ -59,5 +72,7 @@ watch(
     ref="containerRef"
     class="markdown-body"
     v-html="htmlContent"
+    @click="handleContainerClick"
   />
+  <ImageViewer ref="imageViewerRef" />
 </template>

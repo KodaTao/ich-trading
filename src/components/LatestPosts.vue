@@ -26,6 +26,7 @@ const posts = computed(() => getLatestPosts(5))
         :subtitle="post.subtitle"
         :summary="post.summary"
         :tags="post.tags"
+        :review="post.review"
         :style="{ animationDelay: `${index * 60}ms` }"
         class="animate-fade-in"
       />

@@ -53,6 +53,7 @@ ICH Trading 是一个基于 GitHub Pages 的纯前端预测发布平台。通过
 
 ```
 Vue 3 (Composition API)  ·  Vite  ·  Tailwind CSS 3  ·  Vue Router 4
+
 markdown-it  ·  highlight.js  ·  Mermaid  ·  Service Worker
 ```
 

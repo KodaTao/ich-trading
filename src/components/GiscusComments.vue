@@ -1,9 +1,14 @@
 <script setup>
+import { computed } from 'vue'
 import Giscus from '@giscus/vue'
+import { useTheme } from '../composables/useTheme.js'
 
 defineProps({
   term: { type: String, required: true },
 })
+
+const { theme } = useTheme()
+const giscusTheme = computed(() => theme.value === 'light' ? 'light' : 'dark_dimmed')
 </script>
 
 <template>
@@ -19,7 +24,7 @@ defineProps({
       reactions-enabled="1"
       emit-metadata="0"
       input-position="bottom"
-      theme="dark_dimmed"
+      :theme="giscusTheme"
       lang="zh-CN"
       loading="lazy"
     />

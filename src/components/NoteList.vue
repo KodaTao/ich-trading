@@ -63,12 +63,14 @@ async function loadAllNotes() {
         time: note.time,
         title: note.title || parsed.attributes.title || '',
         body: parsed.body,
+        path: note.path,
       })
     } catch {
       results.push({
         time: note.time,
         title: note.title || '',
         body: '加载失败',
+        path: note.path,
       })
     }
   }
@@ -138,7 +140,7 @@ defineExpose({ scrollToLatest, loading })
 
         <!-- 笔记内容 -->
         <div class="text-sm">
-          <MarkdownRenderer :content="note.body" />
+          <MarkdownRenderer :content="note.body" :base-path="note.path" />
         </div>
 
         <!-- 笔记评论区 -->

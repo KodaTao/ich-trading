@@ -9,6 +9,8 @@ import NoteList from '../components/NoteList.vue'
 import TableOfContents from '../components/TableOfContents.vue'
 import FullscreenViewer from '../components/FullscreenViewer.vue'
 import GiscusComments from '../components/GiscusComments.vue'
+import ReadingProgress from '../components/ReadingProgress.vue'
+import AccuracyBadge from '../components/AccuracyBadge.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -27,6 +29,24 @@ const noteListRef = ref(null)
 const pageTopRef = ref(null)
 const contentRef = ref(null)
 const tocRefreshSignal = ref(0)
+
+// 复盘报告
+const reviewBody = ref('')
+const reviewLoading = ref(false)
+
+async function loadReview() {
+  if (!currentPost.value?.review) return
+  reviewLoading.value = true
+  try {
+    const raw = await loadMarkdown(currentPost.value.review.path)
+    const parsed = parseFrontmatter(raw)
+    reviewBody.value = parsed.body
+  } catch {
+    reviewBody.value = ''
+  } finally {
+    reviewLoading.value = false
+  }
+}
 
 // 全屏查看状态
 const fullscreenVisible = ref(false)
@@ -55,6 +75,12 @@ function handleNoteFullscreen(note) {
     note.title || note.time,
     note.body
   )
+}
+
+async function openReviewFullscreen() {
+  if (!currentPost.value?.review) return
+  if (!reviewBody.value) await loadReview()
+  openFullscreen('复盘报告', reviewBody.value)
 }
 
 // 上一篇 / 下一篇导航
@@ -107,6 +133,9 @@ async function loadContent() {
 
     // 标记已读
     markSymbolRead(symbolCode.value, dateParam.value)
+
+    // 加载复盘报告
+    loadReview()
   } catch (err) {
     error.value = err.message
   } finally {
@@ -138,6 +167,8 @@ watch(
 </script>
 
 <template>
+  <div>
+  <ReadingProgress />
   <div ref="pageTopRef" class="max-w-3xl mx-auto px-4 py-6">
     <!-- 加载中 -->
     <div v-if="loading" class="flex items-center justify-center py-20">
@@ -187,6 +218,19 @@ watch(
             {{ tag }}
           </span>
         </div>
+
+        <!-- 复盘报告入口 -->
+        <button
+          v-if="currentPost?.review"
+          @click="openReviewFullscreen"
+          class="mt-3 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-accent-gold/10 hover:bg-accent-gold/20 transition-colors text-sm"
+        >
+          <AccuracyBadge :accuracy="currentPost.review.accuracy" size="sm" />
+          <span class="text-accent-gold">复盘报告</span>
+          <span v-if="currentPost.review.verdict" class="text-xs text-text-secondary hidden sm:inline truncate max-w-[200px]">
+            {{ currentPost.review.verdict }}
+          </span>
+        </button>
       </header>
 
       <!-- 正文工具栏 -->
@@ -201,7 +245,7 @@ watch(
       </div>
 
       <!-- Markdown 渲染 -->
-      <MarkdownRenderer :content="body" />
+      <MarkdownRenderer :content="body" :base-path="currentPost?.path" />
 
       <!-- 帖子评论区 -->
       <GiscusComments :term="`${symbolCode}/${dateParam}`" />
@@ -249,5 +293,6 @@ watch(
         <MarkdownRenderer :content="fullscreenContent" />
       </FullscreenViewer>
     </template>
+  </div>
   </div>
 </template>

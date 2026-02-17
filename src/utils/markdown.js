@@ -71,7 +71,27 @@ md.renderer.rules.fence = (tokens, idx, options, env, self) => {
   return defaultFenceRenderer(tokens, idx, options, env, self)
 }
 
-export function renderMarkdown(content) {
+/**
+ * 渲染 Markdown
+ * @param {string} content - Markdown 内容
+ * @param {string} [basePath] - 帖子文件路径（如 predictions/BTC/2026-02-16/post.md），用于解析图片相对路径
+ */
+export function renderMarkdown(content, basePath) {
   resetHeadingIds()
-  return md.render(content)
+  const html = md.render(content)
+
+  // 如果提供了 basePath，将图片相对路径转为绝对路径
+  if (basePath) {
+    const baseDir = basePath.substring(0, basePath.lastIndexOf('/') + 1)
+    const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
+
+    return html.replace(
+      /(<img\s[^>]*src=")(?!https?:\/\/|\/|data:)([^"]+)(")/g,
+      (match, prefix, src, suffix) => {
+        return `${prefix}${baseUrl}/${baseDir}${src}${suffix}`
+      }
+    )
+  }
+
+  return html
 }

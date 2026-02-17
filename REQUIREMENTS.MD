@@ -825,11 +825,184 @@ git push
 
 ---
 
-## 十四、后续扩展（暂不实现，架构预留）
+## 十四、搜索功能
 
-- **多主题切换**：已预留 `ThemeToggle` 组件和 `useTheme` composable（古风水墨、简洁明亮等）
-- **搜索功能**：前端内存中对 index.json 的 title / summary / tags 全文搜索
-- **RSS Feed**：脚本生成 `feed.xml`
-- **评论系统**：集成 Giscus（基于 GitHub Discussions）
-- **预测准确率追踪**：frontmatter 增加 `result` 字段
-- **多语言**：易经术语英文对照
+### 14.1 功能概述
+
+在导航栏提供搜索入口，用户可以快速搜索预测报告。搜索基于前端内存中的 index.json 数据，无需后端。
+
+### 14.2 搜索范围
+
+- 帖子标题（title）
+- 帖子摘要（summary）
+- 标签（tags）
+- Symbol 名称和代码
+
+### 14.3 交互设计
+
+- 导航栏搜索图标，点击展开输入框
+- 输入时实时显示搜索结果下拉面板
+- 结果中高亮匹配的关键词
+- 点击结果跳转到对应帖子
+- 支持中文模糊匹配
+
+---
+
+## 十五、RSS Feed
+
+### 15.1 功能概述
+
+生成标准 RSS/Atom Feed 文件，方便用户通过 RSS 阅读器订阅预测更新。
+
+### 15.2 技术方案
+
+- 修改 `generate-index.js`，在生成 index.json 的同时生成 `feed.xml`
+- 包含最新 20 条预测的标题、摘要、链接、发布日期
+- `index.html` 添加 RSS 自动发现 `<link>` 标签
+- CI 构建后复制 `feed.xml` 到 dist/
+
+---
+
+## 十六、预测准确率追踪与复盘
+
+### 16.1 功能概述
+
+以独立的 Markdown 复盘报告形式记录预测准确率，支持在前端展示准确率统计。
+
+### 16.2 复盘报告格式
+
+复盘报告放在对应帖子目录下，文件名为 `review.md`：
+
+```
+predictions/BTC/2026-02-16/
+├── post.md          # 预测正文
+├── review.md        # 复盘报告
+└── notes/
+```
+
+复盘报告 frontmatter：
+
+```markdown
+---
+type: review
+accuracy: 85
+verdict: "主卦方向判断正确，变卦时间点偏差半日"
+tags: ["复盘", "准确"]
+---
+
+## 复盘详情
+
+正文内容...
+```
+
+| 字段 | 必填 | 类型 | 说明 |
+|------|------|------|------|
+| type | 是 | string | 固定为 `"review"` |
+| accuracy | 是 | number | 准确率百分比（0-100） |
+| verdict | 是 | string | 简短点评摘要 |
+| tags | 否 | string[] | 复盘标签 |
+
+### 16.3 前端展示
+
+- PostCard 上显示准确率 badge（绿 ≥80 / 黄 ≥50 / 红 <50）
+- SymbolView 信息区展示该 symbol 历史平均准确率
+- PostView 详情页底部展示关联复盘报告的链接/内容
+
+### 16.4 index.json 扩展
+
+```json
+{
+  "date": "2026-02-16",
+  "title": "比特币周易预测",
+  "path": "predictions/BTC/2026-02-16/post.md",
+  "review": {
+    "accuracy": 85,
+    "verdict": "主卦方向判断正确",
+    "path": "predictions/BTC/2026-02-16/review.md"
+  }
+}
+```
+
+---
+
+## 十七、亮色主题切换
+
+### 17.1 功能概述
+
+新增亮色（白天）主题，用户可手动切换或跟随系统偏好。需同时处理：页面组件、Markdown 渲染样式、Giscus 评论 iframe 主题。
+
+### 17.2 技术方案
+
+- 将现有硬编码颜色改为 CSS 变量体系
+- `composables/useTheme.js` 管理主题状态，localStorage 持久化
+- 导航栏添加太阳/月亮切换按钮
+- Giscus 组件监听主题变化，动态传入 `theme` prop（`dark_dimmed` / `light`）
+- Markdown 渲染样式通过 CSS 变量适配双主题
+
+### 17.3 亮色主题配色
+
+- 背景：`#f8f9fa`（主）、`#ffffff`（卡片）
+- 文字：`#1a1a2e`（主）、`#666`（次）
+- 强调色保持不变：科技蓝 `#0099cc`、金色 `#b8941f`
+
+---
+
+## 十八、图片支持
+
+### 18.1 存储方案
+
+图片放在对应帖子目录下的 `images/` 子目录：
+
+```
+predictions/BTC/2026-02-16/
+├── post.md
+├── images/
+│   ├── k-line.png
+│   └── hexagram.png
+└── notes/
+```
+
+Markdown 中使用相对路径引用：`![K线图](images/k-line.png)`
+
+### 18.2 技术处理
+
+- Markdown 渲染时自动将图片相对路径拼接为完整 URL
+- 图片响应式展示（max-width: 100%）
+- 点击图片弹出 lightbox 放大查看
+- `generate-index.js` 扫描时忽略 images 目录
+- CI 部署时 images 目录随 predictions/ 一同复制
+
+---
+
+## 十九、PWA 安装支持
+
+### 19.1 功能概述
+
+提供完整的 PWA 体验，用户可将网站"添加到主屏幕"，获得类原生 App 的体验。
+
+### 19.2 技术方案
+
+- `public/manifest.json`：应用名称、图标（192x192、512x512）、主题色、启动 URL
+- 安装引导组件：监听 `beforeinstallprompt` 事件，弹出安装提示
+- 已安装后不再提示
+
+---
+
+## 二十、阅读进度指示器
+
+### 20.1 功能概述
+
+在预测详情页顶部显示阅读进度条，帮助用户了解阅读位置。
+
+### 20.2 技术方案
+
+- 固定在页面最顶部的细进度条
+- scroll 事件驱动，计算页面滚动百分比
+- 使用主题色渐变
+- 仅在 PostView 详情页显示
+
+---
+
+## 二十一、后续扩展（暂不实现）
+
+- **多语言**：易经术语英文对照（暂无海外用户需求）

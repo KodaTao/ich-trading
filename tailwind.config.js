@@ -5,14 +5,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        'bg-primary': '#0a0a0f',
-        'bg-secondary': '#12121a',
-        'bg-card': 'rgba(255,255,255,0.03)',
-        'accent-blue': '#00d4ff',
-        'accent-gold': '#c9a84c',
-        'text-primary': '#e0e0e0',
-        'text-secondary': '#888888',
-        'border-subtle': 'rgba(255,255,255,0.06)',
+        'bg-primary': 'rgb(var(--bg-primary) / <alpha-value>)',
+        'bg-secondary': 'rgb(var(--bg-secondary) / <alpha-value>)',
+        'bg-card': 'var(--bg-card)',
+        'accent-blue': 'rgb(var(--accent-blue) / <alpha-value>)',
+        'accent-gold': 'rgb(var(--accent-gold) / <alpha-value>)',
+        'text-primary': 'rgb(var(--text-primary) / <alpha-value>)',
+        'text-secondary': 'rgb(var(--text-secondary) / <alpha-value>)',
+        'border-subtle': 'var(--border-subtle)',
       },
       fontFamily: {
         display: ['"Orbitron"', '"Rajdhani"', 'sans-serif'],

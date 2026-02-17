@@ -1,0 +1,19 @@
+{
+  "name": "ICH Trading — 易经交易预测",
+  "short_name": "ICH Trading",
+  "description": "基于易经的股票与加密货币交易预测平台",
+  "start_url": "/ich-trading/",
+  "scope": "/ich-trading/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#00d4ff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
