@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-17T04:39:27.084Z",
+  "lastUpdated": "2026-02-17T20:08:51.854Z",
   "symbols": {
     "01810.HK": {
       "name": "小米集团-W",
@@ -68,6 +68,11 @@
               "time": "2026-02-17T12:15",
               "title": "十二时辰预测表[初一午时,初二巳时]",
               "path": "predictions/ETH-USDT/2026-02-16周/notes/2026-02-17T12-15.md"
+            },
+            {
+              "time": "2026-02-18T04:00",
+              "title": "十二时辰预测表[癸亥日·寅时]",
+              "path": "predictions/ETH-USDT/2026-02-16周/notes/2026-02-18T04-00.md"
             }
           ],
           "review": {
