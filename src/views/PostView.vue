@@ -149,8 +149,11 @@ async function loadContent() {
     attributes.value = parsed.attributes
     body.value = parsed.body
 
-    // 标记已读
-    markSymbolRead(symbolCode.value, dateParam.value)
+    // 标记已读（包含笔记时间戳）
+    const latestNoteTime = currentPost.value.notes?.reduce(
+      (max, n) => (n.time > max ? n.time : max), ''
+    ) || ''
+    markSymbolRead(symbolCode.value, dateParam.value, latestNoteTime)
 
     // 加载复盘报告
     loadReview()

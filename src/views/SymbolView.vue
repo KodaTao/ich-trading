@@ -46,9 +46,15 @@ const filteredPosts = computed(() => {
   )
 })
 
-// 进入页面时标记已读
+// 进入页面时标记已读（包含笔记时间戳）
 if (symbol.value?.posts?.[0]?.date) {
-  markSymbolRead(symbolCode.value, symbol.value.posts[0].date)
+  let latestNoteTime = ''
+  for (const post of symbol.value.posts) {
+    for (const note of post.notes || []) {
+      if (note.time > latestNoteTime) latestNoteTime = note.time
+    }
+  }
+  markSymbolRead(symbolCode.value, symbol.value.posts[0].date, latestNoteTime)
 }
 </script>
 

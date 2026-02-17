@@ -125,7 +125,7 @@ onUnmounted(() => {
     <transition name="search-expand">
       <div
         v-if="expanded"
-        class="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] max-w-md bg-bg-secondary/95 backdrop-blur-md border border-border-subtle rounded-xl shadow-xl shadow-black/30 overflow-hidden"
+        class="fixed top-16 left-1/2 -translate-x-1/2 z-[60] w-[calc(100vw-2rem)] max-w-md bg-bg-secondary/95 backdrop-blur-md border border-border-subtle rounded-xl shadow-xl shadow-black/30 overflow-hidden"
       >
         <div class="flex items-center gap-2 px-3 py-2.5 border-b border-border-subtle">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-text-secondary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -179,6 +179,6 @@ onUnmounted(() => {
 .search-expand-enter-from,
 .search-expand-leave-to {
   opacity: 0;
-  transform: translateY(-4px);
+  transform: translate(-50%, -4px);
 }
 </style>

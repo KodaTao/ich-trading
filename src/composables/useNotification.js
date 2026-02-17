@@ -18,15 +18,27 @@ async function requestPermission() {
 
 /**
  * 发送浏览器通知
- * @param {string[]} symbols - 有更新的 symbol 列表
+ * @param {string[]} postSymbols - 有新帖子的 symbol 列表
+ * @param {string[]} [noteSymbols] - 有新笔记的 symbol 列表
  */
-function sendNotification(symbols) {
+function sendNotification(postSymbols = [], noteSymbols = []) {
   if (!supported.value || permission.value !== 'granted') return
-  if (!symbols || symbols.length === 0) return
 
-  const body = `${symbols.join('、')} 有新的预测发布`
+  const parts = []
+  if (postSymbols.length > 0) {
+    parts.push(`${postSymbols.join('、')} 有新的预测发布`)
+  }
+  if (noteSymbols.length > 0) {
+    parts.push(`${noteSymbols.join('、')} 有新的笔记更新`)
+  }
+  if (parts.length === 0) return
 
-  const notification = new Notification('ICH Trading — 新预测发布', {
+  const body = parts.join('；')
+  const title = noteSymbols.length > 0 && postSymbols.length === 0
+    ? 'ICH Trading — 笔记更新'
+    : 'ICH Trading — 新预测发布'
+
+  const notification = new Notification(title, {
     body,
     icon: '/ich-trading/favicon.ico',
     tag: 'ich-trading-update', // 相同 tag 合并通知，避免重复
