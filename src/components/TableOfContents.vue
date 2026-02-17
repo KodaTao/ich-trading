@@ -14,6 +14,8 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['fullscreen'])
+
 const isOpen = ref(false)
 const activeId = ref('')
 const tocGroups = ref([]) // [{ label, collapsed, items: [{ id, text, level, prefix }] }]
@@ -42,7 +44,7 @@ function buildToc() {
         text: el.textContent.trim(),
         level: parseInt(el.tagName.charAt(1)),
       }))
-      groups.push({ label: '正文', collapsed: false, items })
+      groups.push({ label: '正文', type: 'post', collapsed: false, items })
     }
   }
 
@@ -52,7 +54,7 @@ function buildToc() {
     const articles = noteSection.querySelectorAll('article')
     const noteItems = []
 
-    articles.forEach((article) => {
+    articles.forEach((article, ai) => {
       // 笔记标题（从 header 中的 h3 或时间提取）
       const noteTitle = article.querySelector('h3')
       const noteTime = article.querySelector('.font-mono')
@@ -68,6 +70,7 @@ function buildToc() {
         text: label,
         level: 2,
         isNoteTitle: true,
+        noteIndex: ai,
       })
 
       // 笔记内标题
@@ -85,7 +88,7 @@ function buildToc() {
     })
 
     if (noteItems.length > 0) {
-      groups.push({ label: '📝 笔记', collapsed: false, items: noteItems })
+      groups.push({ label: '📝 笔记', type: 'notes', collapsed: false, items: noteItems })
     }
   }
 
@@ -213,38 +216,62 @@ watch(tocGroups, (groups) => {
       <div class="overflow-y-auto overscroll-contain px-5 py-3 flex-1">
         <div v-for="(group, gi) in tocGroups" :key="gi" class="mb-4 last:mb-0">
           <!-- 分组标题 -->
-          <button
-            @click="toggleGroup(gi)"
-            class="flex items-center gap-1.5 text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2 hover:text-text-primary transition-colors w-full text-left"
-          >
-            <span class="transition-transform duration-200" :class="group.collapsed ? '-rotate-90' : ''">▾</span>
-            {{ group.label }}
-          </button>
+          <div class="flex items-center justify-between mb-2">
+            <button
+              @click="toggleGroup(gi)"
+              class="flex items-center gap-1.5 text-text-secondary text-xs font-semibold uppercase tracking-wider hover:text-text-primary transition-colors text-left"
+            >
+              <span class="transition-transform duration-200" :class="group.collapsed ? '-rotate-90' : ''">▾</span>
+              {{ group.label }}
+            </button>
+            <!-- 正文分组：标题行右侧全屏按钮 -->
+            <button
+              v-if="group.type === 'post'"
+              @click.stop="emit('fullscreen', { type: 'post' }); closeDrawer()"
+              class="text-text-secondary/50 hover:text-accent-blue text-xs transition-colors px-1.5 py-0.5 rounded hover:bg-accent-blue/10"
+              title="沉浸阅读正文"
+            >
+              ⛶
+            </button>
+          </div>
 
           <!-- 标题列表 -->
           <div v-show="!group.collapsed" class="flex flex-col gap-0.5">
-            <button
+            <div
               v-for="item in group.items"
               :key="item.id"
-              @click="scrollToHeading(item.id)"
-              class="text-left py-1.5 px-2 rounded text-sm transition-colors duration-200 truncate flex items-center"
-              :class="[
-                activeId === item.id
-                  ? 'text-accent-blue bg-accent-blue/10'
-                  : 'text-text-secondary hover:text-text-primary hover:bg-white/5',
-                item.isNoteTitle ? 'font-medium' : '',
-              ]"
+              class="flex items-center"
             >
-              <!-- 层级指示 -->
-              <span v-if="item.isNoteTitle" class="text-accent-gold mr-1.5 shrink-0">●</span>
-              <template v-else-if="item.level === 2">
-                <span class="text-accent-blue/50 mr-1.5 shrink-0 text-xs">■</span>
-              </template>
-              <template v-else-if="item.level >= 3">
-                <span class="text-accent-gold/60 mr-1.5 shrink-0 text-xs ml-3">└</span>
-              </template>
-              <span class="truncate">{{ item.text }}</span>
-            </button>
+              <button
+                @click="scrollToHeading(item.id)"
+                class="flex-1 min-w-0 text-left py-1.5 px-2 rounded text-sm transition-colors duration-200 truncate flex items-center"
+                :class="[
+                  activeId === item.id
+                    ? 'text-accent-blue bg-accent-blue/10'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-white/5',
+                  item.isNoteTitle ? 'font-medium' : '',
+                ]"
+              >
+                <!-- 层级指示 -->
+                <span v-if="item.isNoteTitle" class="text-accent-gold mr-1.5 shrink-0">●</span>
+                <template v-else-if="item.level === 2">
+                  <span class="text-accent-blue/50 mr-1.5 shrink-0 text-xs">■</span>
+                </template>
+                <template v-else-if="item.level >= 3">
+                  <span class="text-accent-gold/60 mr-1.5 shrink-0 text-xs ml-3">└</span>
+                </template>
+                <span class="truncate">{{ item.text }}</span>
+              </button>
+              <!-- 笔记标题项：右侧全屏按钮 -->
+              <button
+                v-if="item.isNoteTitle"
+                @click.stop="emit('fullscreen', { type: 'note', noteIndex: item.noteIndex }); closeDrawer()"
+                class="shrink-0 text-text-secondary/50 hover:text-accent-blue text-xs transition-colors px-1.5 py-1 rounded hover:bg-accent-blue/10 ml-0.5"
+                title="沉浸阅读此笔记"
+              >
+                ⛶
+              </button>
+            </div>
           </div>
         </div>
 
@@ -252,6 +279,7 @@ watch(tocGroups, (groups) => {
           暂无标题
         </div>
       </div>
+
     </div>
   </Transition>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onBeforeUnmount } from 'vue'
+import { watch, onBeforeUnmount } from 'vue'
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
@@ -8,101 +8,77 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
-const containerRef = ref(null)
-
+// 锁定/恢复背景滚动
 watch(
   () => props.visible,
-  async (val) => {
-    if (val) {
-      await enterFullscreen()
-    } else {
-      exitFullscreen()
-    }
+  (val) => {
+    document.body.style.overflow = val ? 'hidden' : ''
   }
 )
-
-async function enterFullscreen() {
-  const el = containerRef.value
-  if (!el) return
-  try {
-    await el.requestFullscreen()
-  } catch (err) {
-    console.warn('Fullscreen API 不可用:', err)
-  }
-}
-
-function exitFullscreen() {
-  if (document.fullscreenElement) {
-    document.exitFullscreen()
-  }
-}
 
 function handleClose() {
   emit('close')
 }
 
-// 监听用户按 Esc 退出全屏
-function onFullscreenChange() {
-  if (!document.fullscreenElement && props.visible) {
-    emit('close')
+// ESC 关闭
+function onKeydown(e) {
+  if (e.key === 'Escape' && props.visible) {
+    handleClose()
   }
 }
 
-// 挂载/卸载事件监听
-if (typeof document !== 'undefined') {
-  document.addEventListener('fullscreenchange', onFullscreenChange)
-}
+document.addEventListener('keydown', onKeydown)
 
 onBeforeUnmount(() => {
-  document.removeEventListener('fullscreenchange', onFullscreenChange)
-  if (document.fullscreenElement === containerRef.value) {
-    document.exitFullscreen()
-  }
+  document.removeEventListener('keydown', onKeydown)
+  document.body.style.overflow = ''
 })
 </script>
 
 <template>
-  <div
-    ref="containerRef"
-    class="fullscreen-viewer"
-    :class="{ 'fullscreen-viewer--active': visible }"
-  >
-    <!-- 全屏内容 -->
-    <template v-if="visible">
-      <!-- 顶部栏 -->
+  <Teleport to="body">
+    <transition name="viewer-fade">
       <div
-        class="sticky top-0 z-10 flex items-center justify-between px-6 py-3 bg-bg-primary/90 backdrop-blur-md border-b border-border-subtle"
+        v-if="visible"
+        class="fixed inset-0 z-[100] flex flex-col"
+        style="background: rgb(var(--bg-primary)); color: rgb(var(--text-primary))"
       >
-        <h2 class="text-base font-semibold text-text-primary truncate mr-4">
-          {{ title }}
-        </h2>
-        <button
-          @click="handleClose"
-          class="shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-text-secondary hover:text-text-primary hover:bg-white/10 transition-colors text-lg"
-          title="退出全屏 (Esc)"
+        <!-- 顶部栏 -->
+        <div
+          class="shrink-0 flex items-center justify-between px-4 md:px-6 py-3 border-b border-border-subtle backdrop-blur-md"
+          style="background: rgb(var(--bg-primary) / 0.9)"
         >
-          ✕
-        </button>
-      </div>
+          <h2 class="text-base font-semibold text-text-primary truncate mr-4">
+            {{ title }}
+          </h2>
+          <button
+            @click="handleClose"
+            class="shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-text-secondary hover:text-text-primary hover:bg-white/10 transition-colors text-lg"
+            title="关闭 (Esc)"
+          >
+            ✕
+          </button>
+        </div>
 
-      <!-- 内容区域 -->
-      <div class="max-w-6xl mx-auto px-8 py-6 overflow-y-auto">
-        <slot />
+        <!-- 内容区域 -->
+        <div class="flex-1 overflow-y-auto">
+          <div class="max-w-4xl mx-auto px-4 md:px-8 py-6">
+            <slot />
+          </div>
+        </div>
       </div>
-    </template>
-  </div>
+    </transition>
+  </Teleport>
 </template>
 
 <style scoped>
-.fullscreen-viewer {
-  display: none;
+.viewer-fade-enter-active,
+.viewer-fade-leave-active {
+  transition: opacity 0.25s ease;
 }
 
-.fullscreen-viewer:fullscreen {
-  display: block;
-  background: rgb(var(--bg-primary));
-  color: rgb(var(--text-primary));
-  overflow-y: auto;
-  height: 100vh;
+.viewer-fade-enter-from,
+.viewer-fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -83,6 +83,24 @@ async function openReviewFullscreen() {
   openFullscreen('复盘报告', reviewBody.value)
 }
 
+function openSingleNoteFullscreen(noteIndex) {
+  const notes = noteListRef.value?.reversedNotes || []
+  const note = notes[noteIndex]
+  if (!note) return
+  openFullscreen(
+    note.title || note.time.replace('T', ' '),
+    note.body
+  )
+}
+
+function handleTocFullscreen(payload) {
+  if (payload.type === 'note') {
+    openSingleNoteFullscreen(payload.noteIndex)
+  } else {
+    openPostFullscreen()
+  }
+}
+
 // 上一篇 / 下一篇导航
 const currentIndex = computed(() => {
   if (!symbol.value?.posts) return -1
@@ -282,7 +300,7 @@ watch(
       </div>
 
       <!-- TOC 悬浮导航 -->
-      <TableOfContents :content-ref="contentRef" :refresh-signal="tocRefreshSignal" />
+      <TableOfContents :content-ref="contentRef" :refresh-signal="tocRefreshSignal" @fullscreen="handleTocFullscreen" />
 
       <!-- 全屏查看器 -->
       <FullscreenViewer

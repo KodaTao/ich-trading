@@ -130,11 +130,13 @@
 - [x] 19.5 index.json 缓存优化：fetch 加 timestamp + cache: no-cache，SW 直接透传不缓存 ✅
 - [x] 19.6 轮询频率从 5 分钟缩短至 1 分钟 ✅
 
-## 阶段二十：全屏查看
+## 阶段二十：沉浸式阅读
 
-- [x] 20.1 新建 FullscreenViewer.vue：浏览器 Fullscreen API，顶部标题栏 + 关闭按钮，max-w-6xl 宽屏阅读 ✅
+- [x] 20.1 新建 FullscreenViewer.vue：固定覆盖层模态（fixed inset-0），替代浏览器 Fullscreen API ✅
 - [x] 20.2 PostView 正文全屏按钮（⛶ 全屏阅读） ✅
 - [x] 20.3 NoteList 每条笔记全屏按钮，emit 事件由 PostView 处理 ✅
+- [x] 20.4 优化 FullscreenViewer：从浏览器 Fullscreen API 改为 CSS fixed 覆盖层模态，进出动画，ESC 关闭，锁定背景滚动 ✅
+- [x] 20.5 TOC 目录导航集成全屏阅读：正文标题行右侧 ⛶ 按钮，每条笔记标题行右侧 ⛶ 按钮，点击分别全屏对应内容 ✅
 
 ## 阶段二十一：Giscus 评论系统
 

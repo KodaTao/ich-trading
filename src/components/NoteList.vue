@@ -82,7 +82,7 @@ async function loadAllNotes() {
 onMounted(loadAllNotes)
 watch(() => props.notes, loadAllNotes)
 
-defineExpose({ scrollToLatest, loading })
+defineExpose({ scrollToLatest, loading, reversedNotes })
 </script>
 
 <template>
