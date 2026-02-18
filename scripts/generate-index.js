@@ -45,7 +45,7 @@ function scanNotes(notesDir, symbolCode, date) {
 
     notes.push({
       time,
-      title: data.title || '',
+      title: data.title || time,
       path: `predictions/${symbolCode}/${date}/notes/${noteFile}`,
     })
   }
