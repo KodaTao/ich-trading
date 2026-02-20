@@ -28,6 +28,9 @@ const loadedNotes = ref([])
 const loading = ref(false)
 const latestNoteEl = ref(null)
 
+// 新增：用于存储当前已展开的笔记路径
+const expandedNotes = ref(new Set())
+
 /**
  * 倒序排列的笔记（最新在前）
  */
@@ -47,12 +50,26 @@ function scrollToLatest() {
   latestNoteEl.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
+/**
+ * 新增：切换笔记的展开/折叠状态
+ */
+function toggleNote(path) {
+  if (expandedNotes.value.has(path)) {
+    expandedNotes.value.delete(path)
+  } else {
+    expandedNotes.value.add(path)
+  }
+}
+
 async function loadAllNotes() {
   if (props.notes.length === 0) {
     loadedNotes.value = []
     return
   }
   loading.value = true
+
+  // 重新加载时清空展开状态，保持默认折叠
+  expandedNotes.value.clear()
 
   const results = []
   for (const note of props.notes) {
@@ -95,59 +112,70 @@ defineExpose({ scrollToLatest, loading, reversedNotes })
 
     <div v-if="loading" class="text-text-secondary text-sm py-4">加载笔记中...</div>
 
-    <!-- 时间轴样式笔记列表（倒序：最新在上） -->
     <div v-else class="relative pl-6 border-l-2 border-accent-gold/30 flex flex-col gap-6">
       <article
-        v-for="(note, index) in reversedNotes"
-        :key="index"
-        :ref="index === 0 ? (el) => (latestNoteEl = el) : undefined"
-        class="relative bg-bg-card border border-border-subtle rounded-lg p-5 shadow-sm"
+          v-for="(note, index) in reversedNotes"
+          :key="index"
+          :ref="index === 0 ? (el) => (latestNoteEl = el) : undefined"
+          class="relative bg-bg-card border border-border-subtle rounded-lg p-5 shadow-sm"
       >
-        <!-- 时间轴节点 -->
         <div class="absolute -left-[calc(1.5rem+5px)] top-5 w-2.5 h-2.5 rounded-full border-2 border-bg-primary"
-          :class="index === 0 ? 'bg-accent-blue shadow-[0_0_6px_rgba(0,212,255,0.5)]' : 'bg-accent-gold'"
+             :class="index === 0 ? 'bg-accent-blue shadow-[0_0_6px_rgba(0,212,255,0.5)]' : 'bg-accent-gold'"
         />
 
-        <!-- 最新标记 -->
         <span
-          v-if="index === 0"
-          class="absolute -top-2.5 right-3 text-[10px] px-1.5 py-0.5 rounded bg-accent-blue/20 text-accent-blue font-mono"
+            v-if="index === 0"
+            class="absolute -top-2.5 right-3 text-[10px] px-1.5 py-0.5 rounded bg-accent-blue/20 text-accent-blue font-mono"
         >
           最新
         </span>
 
-        <!-- 笔记头部 -->
-        <div class="mb-3 pb-3 border-b border-border-subtle">
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="flex items-center gap-1.5 text-text-secondary text-xs mb-1">
-                <span class="text-accent-gold">●</span>
-                <span class="font-mono">{{ formatTime(note.time) }}</span>
-              </div>
-              <h3 v-if="note.title" class="text-text-primary font-semibold text-sm leading-snug">
-                {{ note.title }}
-              </h3>
+        <div
+            class="cursor-pointer group flex items-start justify-between transition-colors"
+            :class="{ 'mb-3 pb-3 border-b border-border-subtle': expandedNotes.has(note.path) }"
+            @click="toggleNote(note.path)"
+        >
+          <div class="flex-1 pr-4">
+            <div class="flex items-center gap-1.5 text-text-secondary text-xs mb-1">
+              <span class="text-accent-gold">●</span>
+              <span class="font-mono">{{ formatTime(note.time) }}</span>
             </div>
+            <h3 v-if="note.title" class="text-text-primary font-semibold text-sm leading-snug group-hover:text-accent-blue transition-colors">
+              {{ note.title }}
+            </h3>
+            <span v-else class="text-text-secondary text-sm italic group-hover:text-accent-blue transition-colors">
+              展开查看内容...
+            </span>
+          </div>
+
+          <div class="flex items-center gap-3 pt-1">
             <button
-              @click="emit('fullscreen', note)"
-              class="shrink-0 text-xs text-text-secondary hover:text-accent-blue transition-colors ml-2"
-              title="全屏查看"
+                @click.stop="emit('fullscreen', note)"
+                class="shrink-0 text-xs text-text-secondary hover:text-accent-blue transition-colors"
+                title="全屏查看"
             >
               ⛶
             </button>
+            <span
+                class="text-xs text-text-secondary transition-transform duration-200"
+                :class="expandedNotes.has(note.path) ? 'rotate-180' : ''"
+            >
+              ▼
+            </span>
           </div>
         </div>
 
-        <!-- 笔记内容 -->
-        <div class="text-sm">
-          <MarkdownRenderer :content="note.body" :base-path="note.path" />
-        </div>
+        <div v-if="expandedNotes.has(note.path)">
+          <div class="text-sm">
+            <MarkdownRenderer :content="note.body" :base-path="note.path" />
+          </div>
 
-        <!-- 笔记评论区 -->
-        <GiscusComments
-          v-if="symbolCode && dateParam"
-          :term="`${symbolCode}/${dateParam}/note/${note.time}`"
-        />
+          <GiscusComments
+              v-if="symbolCode && dateParam"
+              :term="`${symbolCode}/${dateParam}/note/${note.time}`"
+              class="mt-4 pt-4 border-t border-border-subtle"
+          />
+        </div>
       </article>
     </div>
   </section>
