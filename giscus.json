@@ -1,4 +1,4 @@
 {
-  "origins": ["https://kodatao.github.io"],
+  "origins": ["https://kodatao.github.io", "http://localhost:5000"],
   "defaultCommentOrder": "newest"
 }
